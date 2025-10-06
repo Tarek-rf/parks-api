@@ -1,7 +1,7 @@
 -- MariaDB / MySQL mode
 -- Create database and use it
-CREATE DATABASE IF NOT EXISTS national_parks CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
-USE national_parks;
+CREATE DATABASE IF NOT EXISTS parks CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+USE parks;
 
 -- Safety first (in case you rerun the script)
 SET FOREIGN_KEY_CHECKS = 0;
@@ -11,7 +11,7 @@ SET FOREIGN_KEY_CHECKS = 0;
 -- =========================
 
 -- location (from ERD "Location")
-CREATE TABLE location (
+CREATE TABLE locations (
   id INT AUTO_INCREMENT PRIMARY KEY,
   name VARCHAR(120) NOT NULL,
   country VARCHAR(80) NOT NULL,
@@ -26,7 +26,7 @@ CREATE TABLE location (
 ) ENGINE=InnoDB;
 
 -- animal_species (from ERD "AnimalSpecies")
-CREATE TABLE animal_species (
+CREATE TABLE animals (
   id INT AUTO_INCREMENT PRIMARY KEY,
   common_name VARCHAR(100) NOT NULL,
   scientific_name VARCHAR(140) NOT NULL,
@@ -41,7 +41,7 @@ CREATE TABLE animal_species (
 ) ENGINE=InnoDB;
 
 -- activity (from ERD "Activities")
-CREATE TABLE activity (
+CREATE TABLE activities (
   id INT AUTO_INCREMENT PRIMARY KEY,
   activity_name VARCHAR(120) NOT NULL,
   activity_type ENUM('water','snow','land') NOT NULL,
@@ -56,7 +56,7 @@ CREATE TABLE activity (
 ) ENGINE=InnoDB;
 
 -- body_water (from ERD "BodyOfWater")
-CREATE TABLE body_water (
+CREATE TABLE waters (
   id INT AUTO_INCREMENT PRIMARY KEY,
   name VARCHAR(120) NOT NULL,
   type VARCHAR(60) NOT NULL, -- lake, river, pond, etc.
@@ -70,7 +70,7 @@ CREATE TABLE body_water (
 ) ENGINE=InnoDB;
 
 -- vegetation (from ERD "Vegetation")
-CREATE TABLE vegetation (
+CREATE TABLE vegetations (
   id INT AUTO_INCREMENT PRIMARY KEY,
   species_name VARCHAR(140) NOT NULL,
   type VARCHAR(80) NULL,
@@ -85,7 +85,7 @@ CREATE TABLE vegetation (
 ) ENGINE=InnoDB;
 
 -- visitor (from ERD "Visitors")
-CREATE TABLE visitor (
+CREATE TABLE visitors (
   id INT AUTO_INCREMENT PRIMARY KEY,
   first_name VARCHAR(80) NOT NULL,
   last_name VARCHAR(80) NOT NULL,
@@ -109,8 +109,8 @@ CREATE TABLE location_animal (
   location_id INT NOT NULL,
   animal_id INT NOT NULL,
   UNIQUE KEY uq_loc_animal (location_id, animal_id),
-  CONSTRAINT fk_loc_an_loc FOREIGN KEY (location_id) REFERENCES location(id) ON DELETE CASCADE,
-  CONSTRAINT fk_loc_an_animal FOREIGN KEY (animal_id) REFERENCES animal_species(id) ON DELETE CASCADE
+  CONSTRAINT fk_loc_an_loc FOREIGN KEY (location_id) REFERENCES locations(id) ON DELETE CASCADE,
+  CONSTRAINT fk_loc_an_animal FOREIGN KEY (animal_id) REFERENCES animals(id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 -- location_activity (from ERD "LocationActivities")
@@ -119,8 +119,8 @@ CREATE TABLE location_activity (
   location_id INT NOT NULL,
   activity_id INT NOT NULL,
   UNIQUE KEY uq_loc_act (location_id, activity_id),
-  CONSTRAINT fk_loc_act_loc FOREIGN KEY (location_id) REFERENCES location(id) ON DELETE CASCADE,
-  CONSTRAINT fk_loc_act_act FOREIGN KEY (activity_id) REFERENCES activity(id) ON DELETE CASCADE
+  CONSTRAINT fk_loc_act_loc FOREIGN KEY (location_id) REFERENCES locations(id) ON DELETE CASCADE,
+  CONSTRAINT fk_loc_act_act FOREIGN KEY (activity_id) REFERENCES activities(id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 -- location_water (from ERD "LocationBodyOfWater")
@@ -129,8 +129,8 @@ CREATE TABLE location_water (
   location_id INT NOT NULL,
   water_id INT NOT NULL,
   UNIQUE KEY uq_loc_water (location_id, water_id),
-  CONSTRAINT fk_loc_water_loc FOREIGN KEY (location_id) REFERENCES location(id) ON DELETE CASCADE,
-  CONSTRAINT fk_loc_water_water FOREIGN KEY (water_id) REFERENCES body_water(id) ON DELETE CASCADE
+  CONSTRAINT fk_loc_water_loc FOREIGN KEY (location_id) REFERENCES locations(id) ON DELETE CASCADE,
+  CONSTRAINT fk_loc_water_water FOREIGN KEY (water_id) REFERENCES waters(id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 -- location_vegetation (from ERD "LocationVegetation")
@@ -139,8 +139,8 @@ CREATE TABLE location_vegetation (
   location_id INT NOT NULL,
   vegetation_id INT NOT NULL,
   UNIQUE KEY uq_loc_veg (location_id, vegetation_id),
-  CONSTRAINT fk_loc_veg_loc FOREIGN KEY (location_id) REFERENCES location(id) ON DELETE CASCADE,
-  CONSTRAINT fk_loc_veg_veg FOREIGN KEY (vegetation_id) REFERENCES vegetation(id) ON DELETE CASCADE
+  CONSTRAINT fk_loc_veg_loc FOREIGN KEY (location_id) REFERENCES locations(id) ON DELETE CASCADE,
+  CONSTRAINT fk_loc_veg_veg FOREIGN KEY (vegetation_id) REFERENCES vegetations(id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 -- =========================
@@ -159,11 +159,11 @@ CREATE TABLE history (
   was_native_land TINYINT(1) NULL,
   preservation_laws_enacted TEXT NULL,
   significant_restoration_year INT NULL,
-  CONSTRAINT fk_hist_loc FOREIGN KEY (location_id) REFERENCES location(id) ON DELETE CASCADE
+  CONSTRAINT fk_hist_loc FOREIGN KEY (location_id) REFERENCES locations(id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 -- policy (from ERD "Policies")
-CREATE TABLE policy (
+CREATE TABLE policies (
   id INT AUTO_INCREMENT PRIMARY KEY,
   location_id INT NOT NULL,
   policy_name VARCHAR(140) NOT NULL,
@@ -175,11 +175,11 @@ CREATE TABLE policy (
   penalty_details TEXT NULL,
   enforcement_agency VARCHAR(140) NULL,
   is_active TINYINT(1) NOT NULL DEFAULT 1,
-  CONSTRAINT fk_policy_loc FOREIGN KEY (location_id) REFERENCES location(id) ON DELETE CASCADE
+  CONSTRAINT fk_policy_loc FOREIGN KEY (location_id) REFERENCES locations(id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 -- natural_disaster (from ERD "NaturalDisasters")
-CREATE TABLE natural_disaster (
+CREATE TABLE disasters (
   id INT AUTO_INCREMENT PRIMARY KEY,
   location_id INT NOT NULL,
   disaster_type VARCHAR(120) NOT NULL,
@@ -192,29 +192,28 @@ CREATE TABLE natural_disaster (
   evacuations INT NULL,
   recovery_duration_days INT NULL,
   estimated_damage_musd DECIMAL(12,2) NULL,
-  CONSTRAINT fk_disaster_loc FOREIGN KEY (location_id) REFERENCES location(id) ON DELETE CASCADE
+  CONSTRAINT fk_disaster_loc FOREIGN KEY (location_id) REFERENCES locations(id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 -- visit (from ERD "Visits")
-CREATE TABLE visit (
+CREATE TABLE visits (
   id INT AUTO_INCREMENT PRIMARY KEY,
   visitor_id INT NOT NULL,
   location_id INT NOT NULL,
   activity_id INT NULL,
   days_spent INT NULL,
   visit_date DATE NOT NULL,
-  duration_days INT NULL,
   visit_type VARCHAR(60) NULL,
   total_cost DECIMAL(10,2) NULL,
   payment_method ENUM('cash','card','online') NULL,
   feedback_rating TINYINT NULL,
-  CONSTRAINT fk_visit_vis FOREIGN KEY (visitor_id) REFERENCES visitor(id) ON DELETE CASCADE,
-  CONSTRAINT fk_visit_loc FOREIGN KEY (location_id) REFERENCES location(id) ON DELETE CASCADE,
-  CONSTRAINT fk_visit_act FOREIGN KEY (activity_id) REFERENCES activity(id) ON DELETE SET NULL
+  CONSTRAINT fk_visit_vis FOREIGN KEY (visitor_id) REFERENCES visitors(id) ON DELETE CASCADE,
+  CONSTRAINT fk_visit_loc FOREIGN KEY (location_id) REFERENCES locations(id) ON DELETE CASCADE,
+  CONSTRAINT fk_visit_act FOREIGN KEY (activity_id) REFERENCES activities(id) ON DELETE SET NULL
 ) ENGINE=InnoDB;
 
 -- injury (from ERD "Injuries")
-CREATE TABLE injury (
+CREATE TABLE injuries (
   id INT AUTO_INCREMENT PRIMARY KEY,
   visitor_id INT NOT NULL,
   location_id INT NOT NULL,
@@ -228,8 +227,8 @@ CREATE TABLE injury (
   hospital_referred TINYINT(1) NULL,
   incident_description TEXT NULL,
   reported_by VARCHAR(120) NULL,
-  CONSTRAINT fk_injury_vis FOREIGN KEY (visitor_id) REFERENCES visitor(id) ON DELETE CASCADE,
-  CONSTRAINT fk_injury_loc FOREIGN KEY (location_id) REFERENCES location(id) ON DELETE CASCADE
+  CONSTRAINT fk_injury_vis FOREIGN KEY (visitor_id) REFERENCES visitors(id) ON DELETE CASCADE,
+  CONSTRAINT fk_injury_loc FOREIGN KEY (location_id) REFERENCES locations(id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 SET FOREIGN_KEY_CHECKS = 1;
@@ -240,7 +239,7 @@ SET FOREIGN_KEY_CHECKS = 1;
 -- =======================================
 
 -- 1) location (10)
-INSERT INTO location (name, country, province, address, latitude, longitude, area_km2, max_elevation_m, continent, website) VALUES
+INSERT INTO locations (name, country, province, address, latitude, longitude, area_km2, max_elevation_m, continent, website) VALUES
 ('Maple Ridge Park','Canada','British Columbia','123 Forest Rd',49.2827,-123.1207,512.30,2401,'North America','https://mapleridge.example'),
 ('Aurora Valley','Canada','Alberta','77 Valley Way',51.0486,-114.0708,780.00,3205,'North America','https://auroravalley.example'),
 ('Gaspé Shore','Canada','Quebec','9 Côte du Parc',48.8367,-64.4819,345.25,1102,'North America','https://gaspe.example'),
@@ -253,7 +252,7 @@ INSERT INTO location (name, country, province, address, latitude, longitude, are
 ('Seaside Point','Canada','Newfoundland and Labrador','3 Lighthouse Rd',47.5615,-52.7126,155.90,420,'North America','https://seasidepoint.example');
 
 -- 2) animal_species (10)
-INSERT INTO animal_species (common_name, scientific_name, class_name, family_name, population, conservation_status, average_weight_kg, average_height_cm, diet, phylum) VALUES
+INSERT INTO animals (common_name, scientific_name, class_name, family_name, population, conservation_status, average_weight_kg, average_height_cm, diet, phylum) VALUES
 ('Gray Wolf','Canis lupus','Mammalia','Canidae',1200,'least_concern',45.0,80.0,'carnivore','Chordata'),
 ('Moose','Alces alces','Mammalia','Cervidae',850,'least_concern',380.0,190.0,'herbivore','Chordata'),
 ('Bald Eagle','Haliaeetus leucocephalus','Aves','Accipitridae',320,'least_concern',6.5,85.0,'carnivore','Chordata'),
@@ -266,7 +265,7 @@ INSERT INTO animal_species (common_name, scientific_name, class_name, family_nam
 ('Wolverine','Gulo gulo','Mammalia','Mustelidae',70,'threatened',15.0,35.0,'carnivore','Chordata');
 
 -- 3) activity (10)
-INSERT INTO activity (activity_name, activity_type, minimum_age, minimum_height_cm, risk_level, duration_minutes, max_group_size, guide_required, permit_required, cost_per_person) VALUES
+INSERT INTO activities (activity_name, activity_type, minimum_age, minimum_height_cm, risk_level, duration_minutes, max_group_size, guide_required, permit_required, cost_per_person) VALUES
 ('Canoe Tour','water',12,NULL,2,120,8,1,0,45.00),
 ('Kayaking','water',14,NULL,3,90,6,1,0,55.00),
 ('River Rafting','water',16,NULL,5,150,8,1,1,95.00),
@@ -279,7 +278,7 @@ INSERT INTO activity (activity_name, activity_type, minimum_age, minimum_height_
 ('Bird Watching','land',6,NULL,1,90,20,0,0,0.00);
 
 -- 4) body_water (10)
-INSERT INTO body_water (name, type, max_depth_m, is_fresh_water, flow, surface_area_km2, water_temperature_c, water_quality_index, protected_status) VALUES
+INSERT INTO waters (name, type, max_depth_m, is_fresh_water, flow, surface_area_km2, water_temperature_c, water_quality_index, protected_status) VALUES
 ('Silver Lake','lake',35.5,1,NULL,2.100,15.2,82.5,'protected'),
 ('Crystal River','river',12.0,1,'turbulent',1.850,10.3,78.0,'protected'),
 ('Hidden Pond','pond',5.2,1,NULL,0.120,18.1,80.0,'none'),
@@ -292,7 +291,7 @@ INSERT INTO body_water (name, type, max_depth_m, is_fresh_water, flow, surface_a
 ('Glacier Lagoon','lagoon',55.0,0,NULL,4.400,4.5,65.0,'protected');
 
 -- 5) vegetation (10)
-INSERT INTO vegetation (species_name, type, scientific_name, climate_pref, conservation_status, avg_canopy_diameter_m, growth_rate, bloom_season, soil_preference, is_invasive) VALUES
+INSERT INTO vegetations (species_name, type, scientific_name, climate_pref, conservation_status, avg_canopy_diameter_m, growth_rate, bloom_season, soil_preference, is_invasive) VALUES
 ('White Spruce','tree','Picea glauca','boreal','secure',6.0,'moderate',NULL,'loamy',0),
 ('Lodgepole Pine','tree','Pinus contorta','subalpine','secure',7.5,'fast',NULL,'sandy',0),
 ('Paper Birch','tree','Betula papyrifera','temperate','secure',5.0,'moderate',NULL,'loamy',0),
@@ -305,7 +304,7 @@ INSERT INTO vegetation (species_name, type, scientific_name, climate_pref, conse
 ('Wild Rose','shrub','Rosa acicularis','temperate','secure',1.2,'moderate','spring','loamy',0);
 
 -- 6) visitor (10)
-INSERT INTO visitor (first_name, last_name, age_group, gender, height_cm, country_of_origin, is_citizen, address, email, phone_number) VALUES
+INSERT INTO visitors (first_name, last_name, age_group, gender, height_cm, country_of_origin, is_citizen, address, email, phone_number) VALUES
 ('Amira','Khan','adult','female',165,'Canada',1,'101 Pine St','amira.khan@example.com','+1-555-0001'),
 ('Liam','Ross','teen','male',172,'Canada',1,'22 River Rd','liam.ross@example.com','+1-555-0002'),
 ('Noah','Baker','adult','male',181,'USA',0,'9 Summit Ave','noah.baker@example.com','+1-555-0003'),
@@ -381,7 +380,7 @@ INSERT INTO history (location_id, founder, founded_date, most_interesting_fact, 
 (10,'N. Fisher','1990-11-30','Historic lighthouse at point','1995 storm destruction of pier',34,1,'Maritime Heritage Law 1991',2015);
 
 -- 12) policy (10)
-INSERT INTO policy (location_id, policy_name, license_details, policy_description, category, effective_date, expiry_date, penalty_details, enforcement_agency, is_active) VALUES
+INSERT INTO policies (location_id, policy_name, license_details, policy_description, category, effective_date, expiry_date, penalty_details, enforcement_agency, is_active) VALUES
 (1,'Backcountry Permit',NULL,'Permit required for overnight camping','access','2020-01-01',NULL,'$250 fine for violations','Park Rangers',1),
 (2,'Glacier Access','Crampon cert required','Guided access only','safety','2021-06-01',NULL,'Immediate escort out + $500 fine','Mountain Safety Unit',1),
 (3,'Coastal Wildlife Buffer',NULL,'50m buffer from nests','conservation','2019-03-01',NULL,'$300 per incident','Wildlife Service',1),
@@ -394,7 +393,7 @@ INSERT INTO policy (location_id, policy_name, license_details, policy_descriptio
 (10,'Lighthouse Area Fees',NULL,'Entry fee supports restoration','fees','2020-06-01',NULL,'$25 per adult','Heritage Office',1);
 
 -- 13) natural_disaster (10)
-INSERT INTO natural_disaster (location_id, disaster_type, impact_details, event_date, severity, affected_area_sq_km, fatalities, injuries_count, evacuations, recovery_duration_days, estimated_damage_musd) VALUES
+INSERT INTO disasters (location_id, disaster_type, impact_details, event_date, severity, affected_area_sq_km, fatalities, injuries_count, evacuations, recovery_duration_days, estimated_damage_musd) VALUES
 (1,'Landslide','Trail buried near west ridge','1969-08-17','moderate',1.25,0,3,20,60,0.80),
 (2,'Avalanche','Snow slide on north slope','1972-02-09','severe',2.60,2,5,80,120,3.20),
 (3,'Storm Surge','Cliff erosion and nest loss','1986-11-04','moderate',0.90,0,1,30,45,0.50),
@@ -407,20 +406,20 @@ INSERT INTO natural_disaster (location_id, disaster_type, impact_details, event_
 (10,'Hurricane Remnants','Pier destroyed','1995-10-07','severe',2.10,0,6,120,150,2.80);
 
 -- 14) visit (10)
-INSERT INTO visit (visitor_id, location_id, activity_id, days_spent, visit_date, duration_days, visit_type, total_cost, payment_method, feedback_rating) VALUES
-(1,1,7,1,'2025-06-10',1,'day',10.00,'card',5),
-(2,2,6,2,'2025-02-14',2,'overnight',240.00,'card',4),
-(3,3,4,1,'2025-07-21',1,'day',20.00,'cash',5),
-(4,4,8,3,'2024-08-03',3,'camp',0.00,'online',4),
-(5,5,2,1,'2025-03-30',1,'day',55.00,'card',5),
-(6,6,10,1,'2025-05-12',1,'day',0.00,'cash',4),
-(7,7,9,2,'2023-09-05',2,'overnight',300.00,'card',5),
-(8,8,5,1,'2024-06-18',1,'day',25.00,'card',4),
-(9,9,1,2,'2025-01-09',2,'overnight',90.00,'online',3),
-(10,10,3,2,'2024-09-27',2,'overnight',190.00,'card',5);
+INSERT INTO visits (visitor_id, location_id, activity_id, days_spent, visit_date, visit_type, total_cost, payment_method, feedback_rating) VALUES
+(1,1,7,1,'2025-06-10','day',10.00,'card',5),
+(2,2,6,2,'2025-02-14','overnight',240.00,'card',4),
+(3,3,4,1,'2025-07-21','day',20.00,'cash',5),
+(4,4,8,3,'2024-08-03','camp',0.00,'online',4),
+(5,5,2,1,'2025-03-30','day',55.00,'card',5),
+(6,6,10,1,'2025-05-12','day',0.00,'cash',4),
+(7,7,9,2,'2023-09-05','overnight',300.00,'card',5),
+(8,8,5,1,'2024-06-18','day',25.00,'card',4),
+(9,9,1,2,'2025-01-09','overnight',90.00,'online',3),
+(10,10,3,2,'2024-09-27','overnight',190.00,'card',5);
 
 -- 15) injury (10)
-INSERT INTO injury (visitor_id, location_id, injury_name, injury_type, recovery_time_days, body_part_affected, severity_level, treatment_provided, treatment_on_site, hospital_referred, incident_description, reported_by) VALUES
+INSERT INTO injuries (visitor_id, location_id, injury_name, injury_type, recovery_time_days, body_part_affected, severity_level, treatment_provided, treatment_on_site, hospital_referred, incident_description, reported_by) VALUES
 (1,1,'Sprained Ankle','sprain',14,'ankle','moderate','compression + rest',1,0,'Twisted on uneven root','ranger'),
 (2,2,'Frostnip','cold',3,'fingers','minor','warming packs',1,0,'Cold exposure during trek','guide'),
 (3,3,'Bee Sting','allergic',2,'arm','minor','antihistamine',1,0,'Stung near meadow','self'),
