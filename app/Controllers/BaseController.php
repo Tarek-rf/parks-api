@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 
+use App\Exceptions\HttpNonIntegerInputException;
+use App\Exceptions\HttpOutOfRangeInputException;
 use App\Validation\ValidationHelper;
 use Psr\Http\Message\ResponseInterface as Response;
 
@@ -27,13 +29,37 @@ abstract class BaseController
      * @param mixed $model the model used to set the pagination parameters
      * @return void it dose not return anything
      */
-    protected function setPaginationParams(array $filters, $model) : void {
-        if(isset($filters["page"]) && ValidationHelper::isIntAndInRange($filters["page"],1,1000) && isset($filters["page_size"]) && ValidationHelper::isIntAndInRange($filters["page_size"],1,50))
+    protected function setPaginationParams(array $filters, $model, $request) : void {
+        if($this->validatePaginationParams($filters, $request))
         {
             $model->setPaginationOptions(
                 (int)$filters["page"],
                 (int)$filters["page_size"],
             );
         }
+    }
+
+
+    public function validatePaginationParams(array $filters, $request) : bool {
+        if(isset($filters["page"]) && isset($filters["page_size"]))
+        {
+            if(!ValidationHelper::isInt($filters["page"]))
+            {
+                throw new HttpNonIntegerInputException($request, "Invalid page Param: must be a integer value");
+            }
+            if(!ValidationHelper::isInt($filters["page_size"])) {
+                throw new HttpNonIntegerInputException($request, "Invalid page_size Param: must be a integer value");
+            }
+
+            if(!ValidationHelper::isIntAndInRange($filters["page"],1,1000))
+            {
+                throw new HttpOutOfRangeInputException($request, "Invalid page Param: must be a value between 1 and 1000");
+            }
+            if(!ValidationHelper::isIntAndInRange($filters["page_size"],1,1000)) {
+                throw new HttpOutOfRangeInputException($request, "Invalid page_size Param: must be a value between 1 and 1000");
+            }
+            return true;
+        }
+        return false;
     }
 }
