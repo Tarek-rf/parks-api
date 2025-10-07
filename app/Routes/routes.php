@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Controllers\AboutController;
 use App\Helpers\DateTimeHelper;
+use App\Controllers\AnimalsController;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
@@ -15,9 +16,13 @@ return static function (Slim\App $app): void {
     //* ROUTE: GET /
     $app->get('/', [AboutController::class, 'handleAboutWebService']);
 
-    //* NOTE: callback naming pattern: handle<ActionName>, e.g. handleGetPlayers
-    //* ROUTE: GET /players
-    //$app->get('/players', [PlayersController::class, 'handleGetPlayers']);
+    $app->get('/animals', [AnimalsController::class, 'handleGetAnimals']);
+
+    $app->get('/vegetations', [AnimalsController::class, 'handleGetVegetations']);
+
+    $app->get('/locations', [AnimalsController::class, 'handleGetLocations']);
+
+    $app->get('/history', [AnimalsController::class, 'handleGetHistory']);
 
     //* ROUTE: GET /ping
     $app->get('/ping', function (Request $request, Response $response, $args) {
