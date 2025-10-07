@@ -29,7 +29,9 @@ class HistoryController extends BaseController
     {
         $filters = $request->getQueryParams();
 
-        $this->setPaginationParams($filters, $this->history_model);
+        $this->validateSortingParams($filters, $request,["age_of_park"]);
+
+        $this->setPaginationParams($filters, $this->history_model, $request);
 
         $history = $this->history_model->getHistory($filters);
 

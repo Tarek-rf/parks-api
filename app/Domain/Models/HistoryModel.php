@@ -2,10 +2,11 @@
 
 namespace App\Domain\Models;
 
+use App\Exceptions\HttpInvalidSortingParamsException;
 use App\Helpers\Core\PDOService;
 
 /**
- * model use to fetch history data from the database 
+ * model use to fetch history data from the database
  */
 class HistoryModel extends BaseModel
 {
@@ -42,6 +43,10 @@ class HistoryModel extends BaseModel
         if(isset($filters["founded_date_before"]) && !empty($filters["founded_date_before"])){
             $query.= " AND founded_date < :founded_before";
             $pdo_values["founded_before"] = $filters["founded_date_before"];
+        }
+
+        if(isset($filters["sort_by"]) && !empty($filters["sort_by"]) && isset($filters["order"]) && !empty($filters["order"])){
+            $query.= " ORDER BY {$filters["sort_by"]} {$filters["order"]}";
         }
 
         $history = $this->paginate(
