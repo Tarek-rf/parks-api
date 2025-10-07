@@ -6,6 +6,7 @@ namespace App\Domain\Models;
 
 use PDO;
 use App\Helpers\Core\PDOService;
+use App\Helpers\PaginationHelper;
 use Exception;
 
 /**
@@ -39,6 +40,45 @@ abstract class BaseModel
     public function __construct(PDOService $pdo)
     {
         $this->db = $pdo->getPDO();
+    }
+
+    /**
+     * Paginates all results from a SQL query as an array.
+     *
+     * This method executes a SQL query and returns the results in the specified fetch mode.
+     *
+     * @param string $sql The SQL query to be executed.
+     * @param array $args An optional array of parameters to bind to the SQL query.
+     * @param int $fetchMode The PDO fetch mode to use for the results. Defaults to PDO::FETCH_ASSOC.
+     * @return array An array of results from the query, formatted according to the specified fetch mode.
+     */
+    protected function paginate(string $sql, array $args = [], $fetchMode = PDO::FETCH_ASSOC): array
+    {
+        //* Step 1) include the number of records (get the count) will be produced by
+        //* the query before pagination (before adding the LIMIT)
+        $count = $this->count($sql, $args);
+
+        //* Step 2) Instantiate the PaginationHelper class.
+        $helper = new PaginationHelper($this->current_page,$this->records_per_page, $count);
+
+        //* Step 3) Get the computed offset.
+        $offset = $helper->getOffset();
+
+        //* Step 4) Add the following constraint.
+        // $sql . = " LIMIT $this->records_per_page OFFSET $offset";
+        $sql .= " LIMIT $this->records_per_page OFFSET $offset";
+
+        //* Step 5) execute the constrained query to fetch the data,
+        //(array) $this->run($sql, $args)->fetchAll($fetchMode);
+        $data = $this->run($sql, $args)->fetchAll($fetchMode);
+        //* Step 6) produce the paginated response;
+        $returnArray = [
+            "meta" => $helper->getPaginationMetadata(),
+            "data" => $data,
+        ];
+
+        // return (array) $this->run($sql, $args)->fetchAll($fetchMode);
+        return $returnArray;
     }
 
     /**
