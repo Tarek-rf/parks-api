@@ -13,7 +13,7 @@ class VegetationsModel extends BaseModel
         parent::__construct($pdo);
     }
 
-    function getVendors(array $filters): array
+    function getVegetations(array $filters): array
     {
         $pdo_values = [];
         $query = "SELECT * FROM vegetations WHERE 1";
