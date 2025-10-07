@@ -18,7 +18,7 @@ class AnimalsModel extends BaseModel
     /**
      * Summary of getAnimals (Collection and filters)
      * @param array $filters
-     * @return void
+     * @return array
      */
     public function getAnimals(array $filters): array
     {
@@ -47,7 +47,7 @@ class AnimalsModel extends BaseModel
         //todo Add Sorting by Common Name and Sort by Population (Sub-Collection of the location)
 
 
-        $animals = []; //$this->paginate($query, $pdo_values);
+        $animals = $this->paginate($query, $pdo_values);
 
 
         return $animals;
