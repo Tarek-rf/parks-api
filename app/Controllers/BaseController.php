@@ -74,14 +74,6 @@ abstract class BaseController
             if(!in_array(strtoupper($filters["order"]), ["ASC","DESC"])) {
                 throw new HttpInvalidSortingParamsException($request, "Invalid sorting Param: order param must be ASC or DESC");
             }
-
-
         }
-
-        if($filters["sort_by"] != "age_of_park") {
-
-            } else if ($filters["order"] != 'DESC' || $filters["order"] != 'ASC') {
-
-            }
     }
 }
