@@ -5,6 +5,7 @@ declare(strict_types=1);
 use App\Controllers\AboutController;
 use App\Helpers\DateTimeHelper;
 use App\Controllers\AnimalsController;
+use App\Controllers\HistoryController;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
@@ -22,7 +23,7 @@ return static function (Slim\App $app): void {
 
     $app->get('/locations', [AnimalsController::class, 'handleGetLocations']);
 
-    $app->get('/history', [AnimalsController::class, 'handleGetHistory']);
+    $app->get('/history', [HistoryController::class, 'handleGetHistory']);
 
     //* ROUTE: GET /ping
     $app->get('/ping', function (Request $request, Response $response, $args) {

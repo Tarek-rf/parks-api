@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 
+use App\Exceptions\HttpInvalidSortingParamsException;
 use App\Exceptions\HttpNonIntegerInputException;
 use App\Exceptions\HttpOutOfRangeInputException;
 use App\Validation\ValidationHelper;
@@ -61,5 +62,26 @@ abstract class BaseController
             return true;
         }
         return false;
+    }
+
+    public function validateSortingParams(array $filters, $request, array $allowedSortByParam) : void {
+        if(isset($filters["sort_by"]) && !empty($filters["sort_by"]) && isset($filters["order"]) && !empty($filters["order"]))
+        {
+            if(!in_array($filters["sort_by"], $allowedSortByParam))
+            {
+                throw new HttpInvalidSortingParamsException($request, "Invalid sorting Param: sort_by param must be supported by the resource");
+            }
+            if(!in_array(strtoupper($filters["order"]), ["ASC","DESC"])) {
+                throw new HttpInvalidSortingParamsException($request, "Invalid sorting Param: order param must be ASC or DESC");
+            }
+
+
+        }
+
+        if($filters["sort_by"] != "age_of_park") {
+
+            } else if ($filters["order"] != 'DESC' || $filters["order"] != 'ASC') {
+
+            }
     }
 }
