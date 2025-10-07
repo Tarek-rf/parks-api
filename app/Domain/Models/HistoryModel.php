@@ -30,9 +30,9 @@ class HistoryModel extends BaseModel
 
         $query = "SELECT * FROM history WHERE 1  ";
 
-        if(isset($filters["country"]) && !empty($filters["country"])){
-            $query.= " AND country LIKE CONCAT('%',:name_of_country,'%')";
-            $pdo_values["name_of_country"] = $filters["country"];
+        if(isset($filters["was_native_land"]) && !empty($filters["was_native_land"])){
+            $query.= " AND was_native_land = :native_land";
+            $pdo_values["native_land"] = $filters["was_native_land"] == "true" ? 1 : 0;
         }
 
         if(isset($filters["founded_date_after"]) && !empty($filters["founded_date_after"])){
