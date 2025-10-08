@@ -1,0 +1,16 @@
+openapi: '3.1.2'
+info:
+  title: Keyboard and Mice API
+  description: A REST API that provides info about mechanical Keyboard and mice.
+  version: '1.0'
+servers:
+  - url: http://localhost/km-api
+paths:
+ /vendors:
+    get:
+      description: 'Get the list of Keyboards and mice vendors'
+      parameters: []
+      responses:
+        '200':
+          description: OK
+
