@@ -6,6 +6,7 @@ use App\Controllers\AboutController;
 use App\Helpers\DateTimeHelper;
 use App\Controllers\AnimalsController;
 use App\Controllers\HistoryController;
+use App\Controllers\VegetationsController;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
@@ -19,7 +20,7 @@ return static function (Slim\App $app): void {
 
     $app->get('/animals', [AnimalsController::class, 'handleGetAnimals']);
 
-    $app->get('/vegetations', [AnimalsController::class, 'handleGetVegetations']);
+    $app->get('/vegetations', [VegetationsController::class, 'handleGetVegetations']);
 
     $app->get('/locations', [AnimalsController::class, 'handleGetLocations']);
 
