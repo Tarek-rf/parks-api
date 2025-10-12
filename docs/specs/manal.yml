@@ -1,16 +1,36 @@
 openapi: '3.1.2'
 info:
-  title: Keyboard and Mice API
-  description: A REST API that provides info about mechanical Keyboard and mice.
+  title: National Parks API
+  description: A REST API that gives information about national parks
   version: '1.0'
 servers:
-  - url: http://localhost/km-api
+  - url: http://localhost/parks-api
 paths:
- /vendors:
+ /vegetations:
     get:
-      description: 'Get the list of Keyboards and mice vendors'
-      parameters: []
+      description: 'Get the list of vegetation '
+      parameters:
+        - name: type
+          in: query
+          description: type of vegetation
+          required: false
+          schema:
+            type: string
+        - name: bloom
+          in: query
+          description: bloom season of vegetation
+          required: false
+          schema:
+            type: string
+
+
+
       responses:
         '200':
           description: OK
-
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
