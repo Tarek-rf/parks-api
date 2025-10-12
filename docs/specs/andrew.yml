@@ -1,16 +1,67 @@
 openapi: '3.1.2'
 info:
-  title: Keyboard and Mice API
-  description: A REST API that provides info about mechanical Keyboard and mice.
+  title: National Parks API
+  description: A REST API that provides info about National Parks.
   version: '1.0'
 servers:
   - url: http://localhost/km-api
 paths:
- /vendors:
+ /animals:
     get:
-      description: 'Get the list of Keyboards and mice vendors'
-      parameters: []
+      description: 'Get the list of animals'
+      parameters:
+        - name: conservation_status
+          in: query
+          description: finds animals with a given conservation status
+          required: false
+          schema:
+            type: string
+            enum:
+              - extinct
+              - threatened
+              - least concerned
+        - name: diet
+          in: query
+          description: finds animals with a given diet
+          required: false
+          schema:
+            type: string
+        - name: family_name
+          in: query
+          description: finds animals with a given family name
+          required: false
+          schema:
+            type: string
+        - name: common_name
+          in: query
+          description: sorts alphabetically the animal's name
+          required: false
+          schema:
+            type: string
+            enum:
+              - ASC
+              - DESC
+        - name: population
+          in: query
+          description: sorts the population of animals
+          required: false
+          schema:
+            type: integer
+            enum:
+              - ASC
+              - DESC
       responses:
         '200':
           description: OK
+          content:
+            application/json:
+              schema:
+                type: string
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not Found
+
 

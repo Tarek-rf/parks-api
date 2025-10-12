@@ -19,7 +19,7 @@ class AnimalsController extends BaseController
     {
         $filters = $request->getQueryParams();
 
-        $this->setPaginationParams($filters, $this->animals_model);
+        $this->setPaginationParams($filters, $this->animals_model, $request);
 
         //todo error handling and validation
 
