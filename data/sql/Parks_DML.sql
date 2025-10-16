@@ -19,17 +19,17 @@ INSERT INTO locations (name, country, province, address, latitude, longitude, ar
 ('Seaside Point','Canada','Newfoundland and Labrador','3 Lighthouse Rd',47.5615,-52.7126,155.90,420,'North America','https://seasidepoint.example');
 
 -- 2) animal_species (10)
-INSERT INTO animals (common_name, scientific_name, class_name, family_name, population, conservation_status, average_weight_kg, average_height_cm, diet, phylum) VALUES
-('Gray Wolf','Canis lupus','Mammalia','Canidae',1200,'least_concern',45.0,80.0,'carnivore','Chordata'),
-('Moose','Alces alces','Mammalia','Cervidae',850,'least_concern',380.0,190.0,'herbivore','Chordata'),
-('Bald Eagle','Haliaeetus leucocephalus','Aves','Accipitridae',320,'least_concern',6.5,85.0,'carnivore','Chordata'),
-('Grizzly Bear','Ursus arctos horribilis','Mammalia','Ursidae',260,'threatened',270.0,200.0,'omnivore','Chordata'),
-('Beaver','Castor canadensis','Mammalia','Castoridae',3000,'least_concern',25.0,30.0,'herbivore','Chordata'),
-('Snowshoe Hare','Lepus americanus','Mammalia','Leporidae',540,'least_concern',1.6,40.0,'herbivore','Chordata'),
-('Lynx','Lynx canadensis','Mammalia','Felidae',190,'threatened',8.0,55.0,'carnivore','Chordata'),
-('Trumpeter Swan','Cygnus buccinator','Aves','Anatidae',110,'threatened',12.0,120.0,'herbivore','Chordata'),
-('Red Fox','Vulpes vulpes','Mammalia','Canidae',950,'least_concern',7.0,40.0,'omnivore','Chordata'),
-('Wolverine','Gulo gulo','Mammalia','Mustelidae',70,'threatened',15.0,35.0,'carnivore','Chordata');
+INSERT INTO animals (common_name, scientific_name, class_name, family_name, conservation_status, average_weight_kg, average_height_cm, diet, phylum) VALUES
+('Gray Wolf','Canis lupus','Mammalia','Canidae','least_concern',45.0,80.0,'carnivore','Chordata'),
+('Moose','Alces alces','Mammalia','Cervidae','least_concern',380.0,190.0,'herbivore','Chordata'),
+('Bald Eagle','Haliaeetus leucocephalus','Aves','Accipitridae','least_concern',6.5,85.0,'carnivore','Chordata'),
+('Grizzly Bear','Ursus arctos horribilis','Mammalia','Ursidae','threatened',270.0,200.0,'omnivore','Chordata'),
+('Beaver','Castor canadensis','Mammalia','Castoridae','least_concern',25.0,30.0,'herbivore','Chordata'),
+('Snowshoe Hare','Lepus americanus','Mammalia','Leporidae','least_concern',1.6,40.0,'herbivore','Chordata'),
+('Lynx','Lynx canadensis','Mammalia','Felidae','threatened',8.0,55.0,'carnivore','Chordata'),
+('Trumpeter Swan','Cygnus buccinator','Aves','Anatidae','threatened',12.0,120.0,'herbivore','Chordata'),
+('Red Fox','Vulpes vulpes','Mammalia','Canidae','least_concern',7.0,40.0,'omnivore','Chordata'),
+('Wolverine','Gulo gulo','Mammalia','Mustelidae','threatened',15.0,35.0,'carnivore','Chordata');
 
 -- 3) activity (10)
 INSERT INTO activities (activity_name, activity_type, minimum_age, minimum_height_cm, risk_level, duration_minutes, max_group_size, guide_required, permit_required, cost_per_person) VALUES
@@ -84,16 +84,17 @@ INSERT INTO visitors (first_name, last_name, age_group, gender, height_cm, count
 ('Isabella','Rossi','teen','female',160,'Italy',0,'4 Cliffside Rd','isabella.rossi@example.com','+1-555-0010');
 
 -- 7) location_animal (10)  -- map first 10 combos
-INSERT INTO location_animal (location_id, animal_id) VALUES
-(1,1),(1,5),
-(2,4),
-(3,3),
-(4,2),
-(5,8),
-(6,9),
-(7,4),
-(8,7),
-(9,10);
+INSERT INTO location_animal (location_id, animal_id, population) VALUES
+(1,1,50),
+(1,5,100),
+(2,4,12),
+(3,3,24),
+(4,2,5),
+(5,8,32),
+(6,9,67),
+(7,4,15),
+(8,7,42),
+(9,10,33);
 
 -- 8) location_activity (10)
 INSERT INTO location_activity (location_id, activity_id) VALUES
