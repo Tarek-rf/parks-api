@@ -1,0 +1,55 @@
+openapi: "3.1.2"
+info:
+  title: National Parks API
+  description: A REST API that provides info about national parks.
+  version: "1.0"
+servers:
+  - url: http://localhost/parks-api
+paths:
+  /history:
+    get:
+      description: "Get the list of histories of the national parks"
+      parameters:
+        - name: was_native_land
+          in: query
+          description: the histories of the parks that were originally native land
+          required: false
+          schema:
+            type: boolean
+        - name: founded_date_after
+          in: query
+          description: the histories of parks which are founded after this date
+          required: false
+          schema:
+            type: string
+            format: date
+        - name: founded_date_before
+          in: query
+          description: the histories of parks which are founded before this date
+          required: false
+          schema:
+            type: string
+            format: date
+        - name: age_of_park
+          in: query
+          description: sorts the order of histories of parks based on the age of the mark
+          required: false
+          schema:
+            type: integer
+            enum:
+              - DESC
+              - ASC
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: string
+        "400":
+          description: Bad Request
+        "404":
+          description: Not Found
+
+
+

@@ -24,7 +24,7 @@ class VegetationsModel extends BaseModel
     function getVegetations(array $filters): array
     {
         $pdo_values = [];
-        $query = "SELECT * FROM vegetations WHERE 1";
+        $query = "SELECT * FROM vegetations WHERE 1 ";
 
         //filter by vegetation type like tree, flower, grass etc...
         if (isset($filters["type"]) && !empty($filters["type"])) {
@@ -44,11 +44,10 @@ class VegetationsModel extends BaseModel
             $pdo_values["vegetations_growth"]= $filters["growth"];
         }
 
-        //  $vegetations = $this->paginate(
-        //     $query,
-        //     $pdo_values
-        // );
-        $vegetations=[];
+         $vegetations = $this->paginate(
+            $query,
+            $pdo_values
+        );
         return $vegetations;
     }
 

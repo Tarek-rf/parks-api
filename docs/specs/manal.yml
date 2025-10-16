@@ -1,0 +1,36 @@
+openapi: '3.1.2'
+info:
+  title: National Parks API
+  description: A REST API that gives information about national parks
+  version: '1.0'
+servers:
+  - url: http://localhost/parks-api
+paths:
+ /vegetations:
+    get:
+      description: 'Get the list of vegetation '
+      parameters:
+        - name: type
+          in: query
+          description: type of vegetation
+          required: false
+          schema:
+            type: string
+        - name: bloom
+          in: query
+          description: bloom season of vegetation
+          required: false
+          schema:
+            type: string
+
+
+
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
