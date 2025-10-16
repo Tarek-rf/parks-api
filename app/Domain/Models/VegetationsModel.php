@@ -28,19 +28,19 @@ class VegetationsModel extends BaseModel
 
         //filter by vegetation type like tree, flower, grass etc...
         if (isset($filters["type"]) && !empty($filters["type"])) {
-            $query .= " AND type LIKE CONCATE('%',:vegetations_type,'%')";
+            $query .= " AND type LIKE CONCAT('%',:vegetations_type,'%')";
             $pdo_values["vegetations_type"]= $filters["type"];
         }
 
         //filter vegetations by bloom season like sprin, winter etc...
         if (isset($filters["bloom"]) && !empty($filters["bloom"])) {
-            $query .= " AND bloom_season LIKE CONCATE('%',:vegetations_bloom,'%')";
+            $query .= " AND bloom_season LIKE CONCAT('%',:vegetations_bloom,'%')";
             $pdo_values["vegetations_bloom"]= $filters["bloom"];
         }
 
         //filter vegetations by growth rate like fast, moderate, slow
         if (isset($filters["growth"]) && !empty($filters["growth"])) {
-            $query .= " AND growth_rate LIKE CONCATE('%',:vegetations_growth,'%')";
+            $query .= " AND growth_rate LIKE CONCAT('%',:vegetations_growth,'%')";
             $pdo_values["vegetations_growth"]= $filters["growth"];
         }
 
