@@ -40,8 +40,15 @@ abstract class BaseController
         }
     }
 
-
-    public function validatePaginationParams(array $filters, $request) : bool {
+    /**
+     * validates the Pagination parameters that are passed by the client
+     * @param array $filters the filters which contain the pagination
+     * @param mixed $request the request made by the client
+     * @throws \App\Exceptions\HttpNonIntegerInputException if the input is not an integer
+     * @throws \App\Exceptions\HttpOutOfRangeInputException if the input is out of range
+     * @return void dose not return anything
+     */
+    public function validatePaginationParams(array $filters, $request) : void {
         if(isset($filters["page"]) && isset($filters["page_size"]))
         {
             if(!ValidationHelper::isInt($filters["page"]))
@@ -59,11 +66,17 @@ abstract class BaseController
             if(!ValidationHelper::isIntAndInRange($filters["page_size"],1,1000)) {
                 throw new HttpOutOfRangeInputException($request, "Invalid page_size Param: must be a value between 1 and 1000");
             }
-            return true;
         }
-        return false;
     }
 
+    /**
+     * validates the sorting params that where passed by the client
+     * @param array $filters the filters which contain the sorting param
+     * @param mixed $request the request sent by the client
+     * @param array $allowedSortByParam the sorting param that is supported by the controller
+     * @throws \App\Exceptions\HttpInvalidSortingParamsException if the sorting option is not supported
+     * @return void dose not return anything
+     */
     public function validateSortingParams(array $filters, $request, array $allowedSortByParam) : void {
         if(isset($filters["sort_by"]) && !empty($filters["sort_by"]) && isset($filters["order"]) && !empty($filters["order"]))
         {
