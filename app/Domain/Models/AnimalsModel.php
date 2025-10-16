@@ -3,6 +3,7 @@
 namespace App\Domain\Models;
 
 use App\Helpers\Core\PDOService;
+use InvalidArgumentException;
 
 class AnimalsModel extends BaseModel
 {
@@ -24,31 +25,51 @@ class AnimalsModel extends BaseModel
     {
         $pdo_values = [];
 
-        $query = "SELECT * FROM animals WHERE 1 ";
+        $query = "SELECT * FROM animals a WHERE 1 ";
 
         //filter by conservation status
         if (isset($filters["conservation"]) && !empty($filters["conservation"])) {
-            $query .= " AND conservation_status LIKE CONCAT('%', :animal_conservation, '%')";
+            $query .= " AND a.conservation_status LIKE CONCAT('%', :animal_conservation, '%')";
             $pdo_values["animal_conservation"] = $filters["conservation"];
         }
 
         //filter by diet
         if (isset($filters["diet"]) && !empty($filters["diet"])) {
-            $query .= " AND diet LIKE CONCAT('%', :animal_diet , '%')";
+            $query .= " AND a.diet LIKE CONCAT('%', :animal_diet , '%')";
             $pdo_values["animal_diet "] = $filters["diet"];
         }
 
         //filter by family name
         if (isset($filters["family"]) && !empty($filters["family"])) {
-            $query .= " AND family_name LIKE CONCAT('%', :animal_family, '%')";
+            $query .= " AND a.family_name LIKE CONCAT('%', :animal_family, '%')";
             $pdo_values["animal_family"] = $filters["family"];
         }
 
-        //todo Add Sorting by Common Name and Sort by Population (Sub-Collection of the location)
+        $validSortByFields = ['common_name', 'average_weight_kg'];
+        $validOrders = ['asc', 'desc'];
 
+        $sortBy = $filters['sort_by'] ?? 'animal_id';
+        $order = $filters['order'] ?? 'asc';
+
+        if (!in_array($sortBy, $validSortByFields)) {
+            throw new InvalidArgumentException("Invalid sort field: {$sortBy}");
+        }
+
+        if (!in_array(strtolower($order), $validOrders)) {
+            throw new InvalidArgumentException("Invalid sort order: {$order}");
+        }
+
+        $order = strtoupper($order); // Ensure consistent case
+
+        $fieldMapping = [
+            'common_name' => 'common_name',
+            'average_weight_kg' => 'average_weight_kg',
+        ];
+
+        $actualField = $fieldMapping[$sortBy] ?? 'keyboard_id';
+        $query .= " ORDER BY a.{$actualField} {$order}";
 
         $animals = $this->paginate($query, $pdo_values);
-
 
         return $animals;
     }
