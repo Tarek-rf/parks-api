@@ -16,21 +16,41 @@ paths:
           required: false
           schema:
             type: string
+            enum:
+              - tree
+              - flower
+              - shrub
+              - grass
         - name: bloom
           in: query
           description: bloom season of vegetation
           required: false
           schema:
             type: string
-
-
-
+            enum:
+              - winter
+              - spring
+              - summer
+              - fall
+        - name: growth
+          in: query
+          description: growth rate of vegetation
+          required: false
+          schema:
+            type: string
+            enum:
+              - fast
+              - moderate
+              - slow
       responses:
         '200':
           description: OK
+          content:
+            application/json:
+              schema:
+                type: string
         '400':
           description: Bad Request
         '404':
           description: Not Found
-        '500':
-          description: Internal Server Error
+
