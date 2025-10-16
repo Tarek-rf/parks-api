@@ -21,8 +21,6 @@ class AnimalsController extends BaseController
 
         $this->setPaginationParams($filters, $this->animals_model, $request);
 
-        //todo error handling and validation
-
         $animals = $this->animals_model->getAnimals($filters);
 
         return $this->renderJson($response, $animals);

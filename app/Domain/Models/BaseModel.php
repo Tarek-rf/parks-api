@@ -59,7 +59,7 @@ abstract class BaseModel
         $count = $this->count($sql, $args);
 
         //* Step 2) Instantiate the PaginationHelper class.
-        $helper = new PaginationHelper($this->current_page,$this->records_per_page, $count);
+        $helper = new PaginationHelper($this->current_page, $this->records_per_page, $count);
 
         //* Step 3) Get the computed offset.
         $offset = $helper->getOffset();
