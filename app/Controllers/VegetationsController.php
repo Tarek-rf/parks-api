@@ -8,7 +8,6 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 
 class VegetationsController extends BaseController
 {
-    //  private VegetationsModel $vegetations_model;
 
     /**
      * Creates an object of vegetations controller
@@ -16,7 +15,6 @@ class VegetationsController extends BaseController
      */
     public function __construct(private VegetationsModel $vegetations_model)
     {
-        // $this->vegetations_model = $vegetations_model;
     }
 
      /**
@@ -29,11 +27,9 @@ class VegetationsController extends BaseController
     {
         $filters = $request->getQueryParams();
 
-        //Todo validation of pagination params
-        $this->setPaginationParams($filters, $this->vegetations_model,$request);
+        $this->validateSortingParams($filters, $request,["species_name"]);
 
-        //Todo validate the filters
-        //TODO errors
+        $this->setPaginationParams($filters, $this->vegetations_model,$request);
 
         $vegetations = $this->vegetations_model->getVegetations($filters);
 
