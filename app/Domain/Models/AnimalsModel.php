@@ -7,19 +7,16 @@ use InvalidArgumentException;
 
 class AnimalsModel extends BaseModel
 {
-    /**
-     * Summary of __construct
-     * @param \App\Helpers\Core\PDOService $pDOService
-     */
+    
     public function __construct(PDOService $pDOService)
     {
         parent::__construct($pDOService);
     }
 
     /**
-     * Summary of getAnimals (Collection and filters)
-     * @param array $filters
-     * @return array
+     * Gets the animal collection from the database and allows filtering and sorting.
+     * @param array $filters Filters
+     * @return array List of animals
      */
     public function getAnimals(array $filters): array
     {
@@ -75,9 +72,9 @@ class AnimalsModel extends BaseModel
     }
 
     /**
-     * Summary of getAnimalById
-     * @param int $id
-     * @return void
+     * Fetches a single animal based off the animal id. 
+     * @param int $id Id
+     * @return mixed An animal
      */
     public function getAnimalById(int $id): mixed
     {
