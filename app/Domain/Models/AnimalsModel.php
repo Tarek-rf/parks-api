@@ -7,10 +7,14 @@ use App\Helpers\Core\PDOService;
 class AnimalsModel extends BaseModel
 {
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     /**
      * Summary of __construct
      * @param \App\Helpers\Core\PDOService $pDOService
      */
+=======
+
+>>>>>>> Stashed changes
 =======
 
 >>>>>>> Stashed changes
@@ -59,10 +63,13 @@ class AnimalsModel extends BaseModel
 
     /**
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
      * Summary of getAnimalById
      * @param int $id
      * @return void
 =======
+=======
+>>>>>>> Stashed changes
      * Fetches a single animal based off the animal id.
      * @param int $id Id
      * @return mixed An animal
