@@ -7,7 +7,7 @@ use InvalidArgumentException;
 
 class AnimalsModel extends BaseModel
 {
-    
+
     public function __construct(PDOService $pDOService)
     {
         parent::__construct($pDOService);
@@ -72,7 +72,7 @@ class AnimalsModel extends BaseModel
     }
 
     /**
-     * Fetches a single animal based off the animal id. 
+     * Fetches a single animal based off the animal id.
      * @param int $id Id
      * @return mixed An animal
      */
