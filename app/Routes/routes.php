@@ -6,7 +6,9 @@ use App\Controllers\AboutController;
 use App\Helpers\DateTimeHelper;
 use App\Controllers\AnimalsController;
 use App\Controllers\HistoryController;
+use App\Controllers\LocationsController;
 use App\Controllers\VegetationsController;
+use App\Middleware\HelloMiddleware;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
@@ -16,15 +18,19 @@ return static function (Slim\App $app): void {
     // Routes without authentication check: /login, /token
 
     //* ROUTE: GET /
+    // $app->add(HelloMiddleware::class);
     $app->get('/', [AboutController::class, 'handleAboutWebService']);
 
     $app->get('/animals', [AnimalsController::class, 'handleGetAnimals']);
 
     $app->get('/vegetations', [VegetationsController::class, 'handleGetVegetations']);
 
-    $app->get('/locations', [AnimalsController::class, 'handleGetLocations']);
+    $app->get('/locations', [LocationsController::class, 'handleGetLocations']);
+
+    $app->get('/locations/{id}', [LocationsController::class, 'handleGetLocationById']);
 
     $app->get('/history', [HistoryController::class, 'handleGetHistory']);
+
 
     //* ROUTE: GET /ping
     $app->get('/ping', function (Request $request, Response $response, $args) {
