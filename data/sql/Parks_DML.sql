@@ -213,12 +213,12 @@ INSERT INTO locations (name, country, province, address, latitude, longitude, ar
 ('Twilight Marsh', 'Canada', 'Manitoba', '8 Marshland Ave', 50.5678, -96.7890, 310.30, 600, 'North America', 'https://twilightmarsh.example');
 
 -- 2) animals (5 additional)
-INSERT INTO animals (common_name, scientific_name, class_name, family_name, population, conservation_status, average_weight_kg, average_height_cm, diet, phylum) VALUES
-('River Otter', 'Lontra canadensis', 'Mammalia', 'Mustelidae', 600, 'least_concern', 10.5, 60.0, 'carnivore', 'Chordata'),
-('Peregrine Falcon', 'Falco peregrinus', 'Aves', 'Falconidae', 150, 'least_concern', 1.0, 45.0, 'carnivore', 'Chordata'),
-('Porcupine', 'Erethizon dorsatum', 'Mammalia', 'Erethizontidae', 800, 'least_concern', 12.0, 50.0, 'herbivore', 'Chordata'),
-('Mountain Goat', 'Oreamnos americanus', 'Mammalia', 'Bovidae', 200, 'least_concern', 90.0, 120.0, 'herbivore', 'Chordata'),
-('Great Horned Owl', 'Bubo virginianus', 'Aves', 'Strigidae', 90, 'least_concern', 1.5, 55.0, 'carnivore', 'Chordata');
+INSERT INTO animals (common_name, scientific_name, class_name, family_name, conservation_status, average_weight_kg, average_height_cm, diet, phylum) VALUES
+('River Otter', 'Lontra canadensis', 'Mammalia', 'Mustelidae', 'least_concern', 10.5, 60.0, 'carnivore', 'Chordata'),
+('Peregrine Falcon', 'Falco peregrinus', 'Aves', 'Falconidae', 'least_concern', 1.0, 45.0, 'carnivore', 'Chordata'),
+('Porcupine', 'Erethizon dorsatum', 'Mammalia', 'Erethizontidae', 'least_concern', 12.0, 50.0, 'herbivore', 'Chordata'),
+('Mountain Goat', 'Oreamnos americanus', 'Mammalia', 'Bovidae', 'least_concern', 90.0, 120.0, 'herbivore', 'Chordata'),
+('Great Horned Owl', 'Bubo virginianus', 'Aves', 'Strigidae', 'least_concern', 1.5, 55.0, 'carnivore', 'Chordata');
 
 -- 3) activities (5 additional)
 INSERT INTO activities (activity_name, activity_type, minimum_age, minimum_height_cm, risk_level, duration_minutes, max_group_size, guide_required, permit_required, cost_per_person) VALUES
@@ -253,12 +253,12 @@ INSERT INTO visitors (first_name, last_name, age_group, gender, height_cm, count
 ('James', 'Taylor', 'child', 'male', 140, 'UK', 0, '44 Forest Ln', 'james.taylor@example.com', '+1-555-0015');
 
 -- 7) location_animal (5 additional)
-INSERT INTO location_animal (location_id, animal_id) VALUES
-(11, 11),
-(12, 12),
-(13, 13),
-(14, 14),
-(15, 15);
+INSERT INTO location_animal (location_id, animal_id, population) VALUES
+(11, 11, 45),
+(12, 12, 50),
+(13, 13, 25),
+(14, 14, 30),
+(15, 15, 43);
 
 -- 8) location_activity (5 additional)
 INSERT INTO location_activity (location_id, activity_id) VALUES
