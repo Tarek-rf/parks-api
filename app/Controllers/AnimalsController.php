@@ -19,6 +19,8 @@ class AnimalsController extends BaseController
     {
         $filters = $request->getQueryParams();
 
+        $this->validateSortingParams($filters, $request, ['common_name', 'average_weight_kg']);
+
         $this->setPaginationParams($filters, $this->animals_model, $request);
 
         $animals = $this->animals_model->getAnimals($filters);
