@@ -56,17 +56,4 @@ class VegetationsModel extends BaseModel
         return $vegetations;
     }
 
-    /**
-     * fetches a single vegetation based on the Id prOvided
-     * @param int $id Id of vegetation to filter by
-     * @return mixed returns the vegetation that matches the Id or null/ nothing if there is no matching Id
-     */
-    public function getVegetationById(int $id): mixed
-    {
-
-        $sql = "SELECT * FROM vegetations WHERE id = :vegetations_id";
-        $vegetations = $this->fetchSingle($sql, ["vegetations_id" => $id]);
-
-        return $vegetations;
-    }
 }
