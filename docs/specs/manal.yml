@@ -16,21 +16,94 @@ paths:
           required: false
           schema:
             type: string
+            enum:
+              - tree
+              - flower
+              - shrub
+              - grass
         - name: bloom
           in: query
           description: bloom season of vegetation
           required: false
           schema:
             type: string
-
-
-
+            enum:
+              - winter
+              - spring
+              - summer
+              - fall
+        - name: growth
+          in: query
+          description: growth rate of vegetation
+          required: false
+          schema:
+            type: string
+            enum:
+              - fast
+              - moderate
+              - slow
+        - name: species_name
+          in: query
+          description: sorts alphabetically the vegetation by species name
+          required: false
+          schema:
+            type: string
+            enum:
+              - ASC
+              - DESC
       responses:
         '200':
           description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Vegetations'
         '400':
           description: Bad Request
+        '401':
+          description: Unauthorized
         '404':
           description: Not Found
-        '500':
-          description: Internal Server Error
+components:
+  schemas:
+    Vegetations:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        species_name:
+          type: string
+          example: 'White Spruce'
+        type:
+          type: string
+          example: 'tree'
+        scientific_name:
+          type: string
+          example: 'Picea glauca'
+        climate_pref:
+          type: string
+          example: 'boreal'
+        conservation_status:
+          type: string
+          example: 'secure'
+        avg_canopy_diameter_m:
+          type: number
+          example: 6.00
+        growth_rate:
+          type: string
+          example: 'moderate'
+        bloom_season:
+          type: string
+          example: null
+        soil_preference:
+          type: string
+          example: 'loamy'
+        is_invasive:
+          type: number
+          example: 0
+
+

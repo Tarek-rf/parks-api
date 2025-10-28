@@ -41,12 +41,12 @@ paths:
             enum:
               - ASC
               - DESC
-        - name: population
+        - name: average_weight_kg
           in: query
-          description: sorts the population of animals
+          description: sorts by the average weight of the animals (kg)
           required: false
           schema:
-            type: integer
+            type: number
             enum:
               - ASC
               - DESC

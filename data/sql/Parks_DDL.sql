@@ -33,7 +33,6 @@ CREATE TABLE animals (
   scientific_name VARCHAR(140) NOT NULL,
   class_name VARCHAR(80) NULL,
   family_name VARCHAR(80) NULL,
-  population INT NULL,
   conservation_status ENUM('extinct','threatened','least_concern') NOT NULL DEFAULT 'least_concern',
   average_weight_kg DECIMAL(8,2) NULL,
   average_height_cm DECIMAL(8,2) NULL,
@@ -109,6 +108,7 @@ CREATE TABLE location_animal (
   id INT AUTO_INCREMENT PRIMARY KEY,
   location_id INT NOT NULL,
   animal_id INT NOT NULL,
+  population INT NULL,
   UNIQUE KEY uq_loc_animal (location_id, animal_id),
   CONSTRAINT fk_loc_an_loc FOREIGN KEY (location_id) REFERENCES locations(id) ON DELETE CASCADE,
   CONSTRAINT fk_loc_an_animal FOREIGN KEY (animal_id) REFERENCES animals(id) ON DELETE CASCADE
