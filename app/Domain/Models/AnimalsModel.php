@@ -22,7 +22,7 @@ class AnimalsModel extends BaseModel
     {
         $pdo_values = [];
 
-        $query = "SELECT a.* FROM animals a WHERE 1 ";
+        $query = "SELECT * FROM animals WHERE 1 ";
 
         //filter by conservation status
         if (isset($filters["conservation"]) && !empty($filters["conservation"])) {
@@ -42,29 +42,9 @@ class AnimalsModel extends BaseModel
             $pdo_values["animal_family"] = $filters["family"];
         }
 
-        $validSortByFields = ['common_name', 'average_weight_kg'];
-        $validOrders = ['asc', 'desc'];
-
-        $sortBy = $filters['sort_by'] ?? 'id';
-        $order = $filters['order'] ?? 'asc';
-
-        if (!in_array($sortBy, $validSortByFields)) {
-            throw new InvalidArgumentException("Invalid sort field: {$sortBy}");
+        if (isset($filters["sort_by"]) && !empty($filters["sort_by"]) && isset($filters["order"]) && !empty($filters["order"])) {
+            $query .= " ORDER BY {$filters["sort_by"]} {$filters["order"]}";
         }
-
-        if (!in_array(strtolower($order), $validOrders)) {
-            throw new InvalidArgumentException("Invalid sort order: {$order}");
-        }
-
-        $order = strtoupper($order); // Ensure consistent case
-
-        $fieldMapping = [
-            'common_name' => 'common_name',
-            'average_weight_kg' => 'average_weight_kg',
-        ];
-
-        $actualField = $fieldMapping[$sortBy] ?? 'id';
-        $query .= " ORDER BY {$actualField} {$order}";
 
         $animals = $this->paginate($query, $pdo_values);
 
@@ -76,6 +56,7 @@ class AnimalsModel extends BaseModel
      * @param int $id Id
      * @return mixed An animal
      */
+    /*
     public function getAnimalById(int $id): mixed
     {
 
@@ -94,4 +75,5 @@ class AnimalsModel extends BaseModel
 
         return $animal;
     }
+    */
 }
