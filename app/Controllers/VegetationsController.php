@@ -17,24 +17,23 @@ class VegetationsController extends BaseController
     {
     }
 
-     /**
-      * Get a collection resource of vegetations
-      * @param $request the request sent by the client
-      * @param  $response the response sent by the server to the client
-      * @return Response the response sent to the the client
-      */
-     public function handleGetVegetations(Request $request, Response $response): Response
+    /**
+     * Get a collection resource of vegetations
+     * @param $request the request sent by the client
+     * @param  $response the response sent by the server to the client
+     * @return Response the response sent to the the client
+     */
+    public function handleGetVegetations(Request $request, Response $response): Response
     {
         $filters = $request->getQueryParams();
 
-        $this->validateSortingParams($filters, $request,["species_name"]);
+        $this->validateSortingParams($filters, $request, ["species_name"]);
 
-        $this->setPaginationParams($filters, $this->vegetations_model,$request);
+        $this->setPaginationParams($filters, $this->vegetations_model, $request);
 
         $vegetations = $this->vegetations_model->getVegetations($filters);
 
         return $this->renderJson($response, $vegetations);
     }
 
-    //TODO implement handleGetVegetationsById
 }
