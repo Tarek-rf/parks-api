@@ -65,10 +65,6 @@ paths:
           description: Unauthorized
         '404':
           description: Not Found
-<<<<<<< Updated upstream
-
-
-=======
 components:
   schemas:
     Aniamls:
@@ -106,4 +102,3 @@ components:
         phylum:
           type: string
           example: 'Chordata'
->>>>>>> Stashed changes
