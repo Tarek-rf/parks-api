@@ -30,6 +30,15 @@ class HelloMiddleware implements MiddlewareInterface
         // Optional: Handle the incoming request
         //* ...Before middleware!
 
+        // $header = $request->getHeader("Accept");
+
+        // foreach ($header as $key => $value) {
+        //     if (!str_contains($value, "application/json")) {
+        //         // You can throw an exception or return a response indicating unsupported media type
+        //         throw new \App\Exceptions\HttpOutOfRangeInputException();
+        //     }
+        // }
+
         //! DO NOT remove or change the following statements.
         // Invoke the next middleware and get response
         $response = $handler->handle($request);
