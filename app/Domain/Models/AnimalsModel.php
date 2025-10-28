@@ -22,30 +22,30 @@ class AnimalsModel extends BaseModel
     {
         $pdo_values = [];
 
-        $query = "SELECT * FROM animals a WHERE 1 ";
+        $query = "SELECT a.* FROM animals a WHERE 1 ";
 
         //filter by conservation status
         if (isset($filters["conservation"]) && !empty($filters["conservation"])) {
-            $query .= " AND a.conservation_status LIKE CONCAT('%', :animal_conservation, '%')";
+            $query .= " AND conservation_status LIKE CONCAT('%', :animal_conservation, '%')";
             $pdo_values["animal_conservation"] = $filters["conservation"];
         }
 
         //filter by diet
         if (isset($filters["diet"]) && !empty($filters["diet"])) {
-            $query .= " AND a.diet LIKE CONCAT('%', :animal_diet , '%')";
+            $query .= " AND diet LIKE CONCAT('%', :animal_diet , '%')";
             $pdo_values["animal_diet "] = $filters["diet"];
         }
 
         //filter by family name
         if (isset($filters["family"]) && !empty($filters["family"])) {
-            $query .= " AND a.family_name LIKE CONCAT('%', :animal_family, '%')";
+            $query .= " AND family_name LIKE CONCAT('%', :animal_family, '%')";
             $pdo_values["animal_family"] = $filters["family"];
         }
 
         $validSortByFields = ['common_name', 'average_weight_kg'];
         $validOrders = ['asc', 'desc'];
 
-        $sortBy = $filters['sort_by'] ?? 'animal_id';
+        $sortBy = $filters['sort_by'] ?? 'id';
         $order = $filters['order'] ?? 'asc';
 
         if (!in_array($sortBy, $validSortByFields)) {
@@ -63,8 +63,8 @@ class AnimalsModel extends BaseModel
             'average_weight_kg' => 'average_weight_kg',
         ];
 
-        $actualField = $fieldMapping[$sortBy] ?? 'keyboard_id';
-        $query .= " ORDER BY a.{$actualField} {$order}";
+        $actualField = $fieldMapping[$sortBy] ?? 'id';
+        $query .= " ORDER BY {$actualField} {$order}";
 
         $animals = $this->paginate($query, $pdo_values);
 
@@ -82,12 +82,12 @@ class AnimalsModel extends BaseModel
         $pdo_values = [];
 
         $query = "SELECT * FROM animals WHERE 1";
-        if (isset($id) && $id >= 1) {
-            $query .= " AND animal_id = :$id"; //prevent sql injections
-            $pdo_values["animal_id"] = $id;
+        if (isset($id) && !empty($id)) {
+            $query .= " AND id = :animal_id"; //prevent sql injections
+            $pdo_values = ['animal_id' => $id];
         }
 
-        $animal = $this->fetchAll(
+        $animal = $this->fetchSingle(
             $query,
             $pdo_values
         );
