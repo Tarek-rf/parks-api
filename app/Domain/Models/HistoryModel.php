@@ -57,4 +57,14 @@ class HistoryModel extends BaseModel
         return $history;
     }
 
+    public function createHistory(array $new_history): int {
+        return $this->insert("history",$new_history);
+    }
+
+    public function updateHistory(array $existing_history): int {
+        // last param should be the where condition  so the id primary key
+        return $this->update("history",$existing_history, ["history_id" => 1]);
+    }
+
+
 }
