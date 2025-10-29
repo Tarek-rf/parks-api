@@ -1,16 +1,104 @@
 openapi: '3.1.2'
 info:
-  title: Keyboard and Mice API
-  description: A REST API that provides info about mechanical Keyboard and mice.
+  title: National Parks API
+  description: A REST API that provides info about National Parks.
   version: '1.0'
 servers:
   - url: http://localhost/km-api
 paths:
- /vendors:
+ /animals:
     get:
-      description: 'Get the list of Keyboards and mice vendors'
-      parameters: []
+      description: 'Get the list of animals'
+      parameters:
+        - name: conservation_status
+          in: query
+          description: finds animals with a given conservation status
+          required: false
+          schema:
+            type: string
+            enum:
+              - extinct
+              - threatened
+              - least concerned
+        - name: diet
+          in: query
+          description: finds animals with a given diet
+          required: false
+          schema:
+            type: string
+        - name: family_name
+          in: query
+          description: finds animals with a given family name
+          required: false
+          schema:
+            type: string
+        - name: common_name
+          in: query
+          description: sorts alphabetically the animal's name
+          required: false
+          schema:
+            type: string
+            enum:
+              - ASC
+              - DESC
+        - name: average_weight_kg
+          in: query
+          description: sorts by the average weight of the animals (kg)
+          required: false
+          schema:
+            type: number
+            enum:
+              - ASC
+              - DESC
       responses:
         '200':
           description: OK
-
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Aniamls'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not Found
+components:
+  schemas:
+    Aniamls:
+      x-parks-router-model: io.parks-api.model.Animal
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        common_name:
+          type: string
+          example: Cat
+        scientific_name:
+          type: string
+          example: 'Felis catus'
+        class_name:
+          type: string
+          example: Mammalia
+        family_name:
+          type: string
+          example: Felidae
+        conservation_status:
+          type: string
+          example: 'least concern'
+        average_weight:
+          type: number
+          example: 4.54
+        average_height:
+          type: number
+          example: 46
+        diet:
+          type: string
+          example: 'Carnivore'
+        phylum:
+          type: string
+          example: 'Chordata'

@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 use App\Middleware\HelloMiddleware;
 use Slim\App;
+use App\Middleware\ContentNegotiationMiddleware;
 
 return function (App $app) {
     //TODO: Add your middleware here.
-
+    $app->add(ContentNegotiationMiddleware::class);
     $app->addBodyParsingMiddleware();
     $app->addRoutingMiddleware();
 

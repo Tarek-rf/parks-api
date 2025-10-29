@@ -3,22 +3,20 @@
 namespace App\Domain\Models;
 
 use App\Helpers\Core\PDOService;
+use InvalidArgumentException;
 
 class AnimalsModel extends BaseModel
 {
-    /**
-     * Summary of __construct
-     * @param \App\Helpers\Core\PDOService $pDOService
-     */
+
     public function __construct(PDOService $pDOService)
     {
         parent::__construct($pDOService);
     }
 
     /**
-     * Summary of getAnimals (Collection and filters)
-     * @param array $filters
-     * @return array
+     * Gets the animal collection from the database and allows filtering and sorting.
+     * @param array $filters Filters
+     * @return array List of animals
      */
     public function getAnimals(array $filters): array
     {
@@ -44,36 +42,45 @@ class AnimalsModel extends BaseModel
             $pdo_values["animal_family"] = $filters["family"];
         }
 
-        //todo Add Sorting by Common Name and Sort by Population (Sub-Collection of the location)
-
+        if (isset($filters["sort_by"]) && !empty($filters["sort_by"]) && isset($filters["order"]) && !empty($filters["order"])) {
+            $query .= " ORDER BY {$filters["sort_by"]} {$filters["order"]}";
+        }
 
         $animals = $this->paginate($query, $pdo_values);
-
 
         return $animals;
     }
 
     /**
-     * Summary of getAnimalById
-     * @param int $id
-     * @return void
+     * Fetches a single animal based off the animal id.
+     * @param int $id Id
+     * @return mixed An animal
      */
+    /*
     public function getAnimalById(int $id): mixed
     {
 
         $pdo_values = [];
 
         $query = "SELECT * FROM animals WHERE 1";
-        if (isset($id) && $id >= 1) {
-            $query .= " AND animal_id = :$id"; //prevent sql injections
-            $pdo_values["animal_id"] = $id;
+        if (isset($id) && !empty($id)) {
+            $query .= " AND id = :animal_id"; //prevent sql injections
+            $pdo_values = ['animal_id' => $id];
         }
 
-        $animal = $this->fetchAll(
+        $animal = $this->fetchSingle(
             $query,
             $pdo_values
         );
 
         return $animal;
+    }
+    */
+
+    public function createAnimal(array $new_animal): int
+    {
+
+        return $this->insert("animals", $new_animal);
+        //return $this->update("animals", $existing_animal, ["id" => $id]);
     }
 }
