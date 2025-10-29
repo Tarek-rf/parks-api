@@ -76,4 +76,11 @@ class AnimalsModel extends BaseModel
         return $animal;
     }
     */
+
+    public function createAnimal(array $new_animal): int
+    {
+
+        return $this->insert("animals", $new_animal);
+        //return $this->update("animals", $existing_animal, ["id" => $id]);
+    }
 }

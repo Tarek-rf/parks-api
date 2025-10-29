@@ -25,19 +25,23 @@ return static function (Slim\App $app): void {
 
 
 
-
-
-
-
-
-    
-    $app->get('/animals', [AnimalsController::class, 'handleGetAnimals']);
-
-    $app->get('/vegetations', [VegetationsController::class, 'handleGetVegetations']);
-
+    // Locations Routes
     $app->get('/locations', [LocationsController::class, 'handleGetLocations']);
 
+    $app->post('/locations', [LocationsController::class, 'handleCreateLocation']);
+
     $app->get('/locations/{id}', [LocationsController::class, 'handleGetLocationById']);
+
+
+    $app->get('/animals', [AnimalsController::class, 'handleGetAnimals']);
+    $app->post('/animals', [AnimalsController::class, 'handleCreateAnimal']);
+    $app->delete('/animals', [AnimalsController::class, 'handleDeleteAnimal']);
+    $app->put('/animals', [AnimalsController::class, 'handleUpdateAnimal']);
+
+
+    $app->get('/vegetations', [VegetationsController::class, 'handleGetVegetations']);
+    
+    $app->post('/vegetations', [VegetationsController::class, 'handleCreateVegetation']);
 
     $app->get('/history', [HistoryController::class, 'handleGetHistory']);
     $app->Post('/history', [HistoryController::class, 'handleCreateHistory']);

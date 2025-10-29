@@ -146,4 +146,13 @@ class LocationsModel extends BaseModel
 
         return $location;
     }
+
+    public function createLocation(array $new_location): int
+    {
+
+        // $sql = "INSERT INTO locations VALUES (name, country, province, address, latitude)"
+        return $this->insert('locations', $new_location);
+        // return $this->update('locations', $existing_location, ["location_id" => $location_id]);
+
+    }
 }

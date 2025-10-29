@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Domain\Models\AnimalsModel;
+use App\Domain\Services\AnimalsService;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
@@ -10,11 +11,17 @@ class AnimalsController extends BaseController
 {
     private AnimalsModel $animals_model;
 
-    public function __construct(AnimalsModel $animals_model)
+    public function __construct(AnimalsModel $animals_model, private AnimalsService $animals_service)
     {
         $this->animals_model = $animals_model;
     }
 
+    /**
+     *  Handles the animal collection and validates the sorting and pagination filters.
+     * @param \Psr\Http\Message\ServerRequestInterface $request Request
+     * @param \Psr\Http\Message\ResponseInterface $response Response
+     * @return Response JSON response
+     */
     public function handleGetAnimals(Request $request, Response $response): Response
     {
         $filters = $request->getQueryParams();
@@ -26,5 +33,39 @@ class AnimalsController extends BaseController
         $animals = $this->animals_model->getAnimals($filters);
 
         return $this->renderJson($response, $animals);
+    }
+
+    public function handleCreateAnimal(Request $request, Response $response): Response
+    {
+        $data = $request->getParsedBody();
+
+        $result = $this->animals_service->doCreateAnimal($data);
+
+        if ($result->isSuccess()) {
+            $data["data"] = $result->getData();
+            return $this->renderJson($response, $data, 201);
+        }
+
+        //* The operation failed, return the error response
+
+        $payload = [
+            "code" => "error",
+            "message" => "failed to create the new animal, refer to the details below",
+            "details" => $result->getErrors()
+        ];
+
+
+        return $this->renderJson($response, $payload, 400);
+    }
+
+
+    public function handleDeleteAnimal(Request $request, Response $response): Response
+    {
+        return $response;
+    }
+
+    public function handleUpdateAnimal(Request $request, Response $response): Response
+    {
+        return $response;
     }
 }
