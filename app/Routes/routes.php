@@ -21,6 +21,16 @@ return static function (Slim\App $app): void {
     // $app->add(HelloMiddleware::class);
     $app->get('/', [AboutController::class, 'handleAboutWebService']);
 
+
+
+
+
+
+
+
+
+
+    
     $app->get('/animals', [AnimalsController::class, 'handleGetAnimals']);
 
     $app->get('/vegetations', [VegetationsController::class, 'handleGetVegetations']);
@@ -30,6 +40,7 @@ return static function (Slim\App $app): void {
     $app->get('/locations/{id}', [LocationsController::class, 'handleGetLocationById']);
 
     $app->get('/history', [HistoryController::class, 'handleGetHistory']);
+    $app->Post('/history', [HistoryController::class, 'handleCreateHistory']);
 
 
     //* ROUTE: GET /ping
