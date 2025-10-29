@@ -1,16 +1,437 @@
-openapi: '3.1.2'
+openapi: "3.1.2"
 info:
-  title: Keyboard and Mice API
-  description: A REST API that provides info about mechanical Keyboard and mice.
-  version: '1.0'
+  title: National Parks API
+  description: A REST API that provides info about national parks.
+  version: "1.0"
 servers:
-  - url: http://localhost/km-api
+  - url: http://localhost/parks-api
 paths:
- /vendors:
+  /history:
     get:
-      description: 'Get the list of Keyboards and mice vendors'
-      parameters: []
+      description: "Get the list of histories of the national parks"
+      parameters:
+        - name: was_native_land
+          in: query
+          description: the histories of the parks that were originally native land
+          required: false
+          schema:
+            type: boolean
+            enum:
+              - true
+              - false
+        - name: founded_date_after
+          in: query
+          description: the histories of parks which are founded after this date
+          required: false
+          schema:
+            type: string
+            format: date
+        - name: founded_date_before
+          in: query
+          description: the histories of parks which are founded before this date
+          required: false
+          schema:
+            type: string
+            format: date
+        - name: sort_by
+          in: query
+          description: Field to sort results by
+          required: false
+          schema:
+            type: string
+            enum:
+              - age_of_park
+        - name: order
+          in: query
+          description: sorts the order of histories of parks based on the age of the mark
+          required: false
+          schema:
+            type: string
+            enum:
+              - desc
+              - asc
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/History'
+        "400":
+          description: Bad Request
+        "404":
+          description: Not Found
+  /locations:
+    get:
+      description: 'Get the list of national parks locations'
+      parameters:
+        - name: name
+          in: query
+          description: The name of the national park
+          required: false
+          schema:
+            type: string
+        - name: country
+          in: query
+          description: Name of the country the national park is in
+          required: false
+          schema:
+            type: string
+        - name: province
+          in: query
+          description: Name of the province the national park is in
+          required: false
+          schema:
+            type: string
+        - name: area.min
+          in: query
+          description: Minimum area by square kilometer of the national park
+          required: false
+          schema:
+            type: number
+        - name: area.max
+          in: query
+          description: Maximum area by square kilometer of the national park
+          required: false
+          schema:
+            type: number
+        - name: sort_by
+          in: query
+          description: Field to sort results by
+          required: false
+          schema:
+            type: string
+            enum:
+              - id
+              - name
+              - country
+              - area
+            default: id
+        - name: order
+          in: query
+          description: Sort direction
+          required: false
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+            default: asc
       responses:
         '200':
           description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Location'
+        '400':
+          description: Bad Request
+        '422':
+          description: Unprocessable Entity
+        '404':
+          description: Not Found
+  /vegetations:
+    get:
+      description: 'Get the list of vegetation '
+      parameters:
+        - name: type
+          in: query
+          description: type of vegetation
+          required: false
+          schema:
+            type: string
+            enum:
+              - tree
+              - flower
+              - shrub
+              - grass
+        - name: bloom
+          in: query
+          description: bloom season of vegetation
+          required: false
+          schema:
+            type: string
+            enum:
+              - winter
+              - spring
+              - summer
+              - fall
+        - name: growth
+          in: query
+          description: growth rate of vegetation
+          required: false
+          schema:
+            type: string
+            enum:
+              - fast
+              - moderate
+              - slow
+        - name: sort_by
+          in: query
+          description: Field to sort results by
+          required: false
+          schema:
+            type: string
+            enum:
+              - species_name
+            default: species_name
+        - name: order
+          in: query
+          description: Sort direction
+          required: false
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+            default: asc
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Vegetations'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not Found
+  /animals:
+    get:
+      description: 'Get the list of animals'
+      parameters:
+        - name: conservation_status
+          in: query
+          description: finds animals with a given conservation status
+          required: false
+          schema:
+            type: string
+            enum:
+              - extinct
+              - threatened
+              - least concerned
+        - name: diet
+          in: query
+          description: finds animals with a given diet
+          required: false
+          schema:
+            type: string
+        - name: family_name
+          in: query
+          description: finds animals with a given family name
+          required: false
+          schema:
+            type: string
+        - name: common_name
+          in: query
+          description: sorts alphabetically the animal's name
+          required: false
+          schema:
+            type: string
+            enum:
+              - ASC
+              - DESC
+        - name: sort_by
+          in: query
+          description: Field to sort results by
+          required: false
+          schema:
+            type: string
+            enum:
+              - average_weight_kg
+              - common_name
+        - name: order
+          in: query
+          description: Sort direction
+          required: false
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+            default: asc
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Aniamls'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not Found
+components:
+  schemas:
+    History:
+      x-parks-router-model: io.parks-api.model.History
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        location_id:
+          type: integer
+          format: int64
+          example: 1
+        founder:
+          type: string
+          example: Matthew
+        lastName:
+          type: string
+          example: James
+        founded_date:
+          type: string
+          example: '2005-01-12'
+        most_interesting_fact:
+          type: string
+          example: 'oldest oak trees exist here'
+        major_historic_accident:
+          type: string
+          example: '1980 landslide'
+        age_of_park:
+          type: integer
+          format: int64
+          example: 20
+        was_native_land:
+          type: integer
+          format: int64
+          example: 1
+        preservation_laws_enacted:
+          type: string
+          example: 'Forest Act 1950'
+        significant_restoration_year:
+          type: integer
+          format: int64
+          example: 2010
+    Location:
+        x-parks-router-model: io.parks-api.model.Location
+        type: object
+        properties:
+          id:
+            type: integer
+            format: int64
+            example: 1
+          name:
+            type: string
+            example: 'Maple Ridge Park'
+          country:
+            type: string
+            example: 'Canada'
+          province:
+            type: string
+            example: 'British Columbia'
+          address:
+            type: string
+            example: '123 Forest Rd'
+          latitude:
+            type: number
+            format: float
+            example: '49.282700'
+          longitude:
+            type: number
+            format: float
+            example: '-123.120700'
+          area_km2:
+            type: number
+            format: float
+            example: 512.30
+          max_elevation_m:
+            type: integer
+            format: int64
+            example: 2401
+          continent:
+            type: string
+            example: 'North America'
+          website:
+            type: string
+            format: uri
+            example: 'https://mapleridge.example'
+    Vegetations:
+      x-parks-router-model: io.parks-api.model.Vegetation
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        species_name:
+          type: string
+          example: 'White Spruce'
+        type:
+          type: string
+          example: 'tree'
+        scientific_name:
+          type: string
+          example: 'Picea glauca'
+        climate_pref:
+          type: string
+          example: 'boreal'
+        conservation_status:
+          type: string
+          example: 'secure'
+        avg_canopy_diameter_m:
+          type: number
+          example: 6.00
+        growth_rate:
+          type: string
+          example: 'moderate'
+        bloom_season:
+          type: string
+          example: null
+        soil_preference:
+          type: string
+          example: 'loamy'
+        is_invasive:
+          type: number
+          example: 0
+    Aniamls:
+        x-parks-router-model: io.parks-api.model.Animal
+        type: object
+        properties:
+          id:
+            type: integer
+            format: int64
+            example: 1
+          common_name:
+            type: string
+            example: Cat
+          scientific_name:
+            type: string
+            example: 'Felis catus'
+          class_name:
+            type: string
+            example: Mammalia
+          family_name:
+            type: string
+            example: Felidae
+          conservation_status:
+            type: string
+            example: 'least concern'
+          average_weight:
+            type: number
+            example: 4.54
+          average_height:
+            type: number
+            example: 46
+          diet:
+            type: string
+            example: 'Carnivore'
+          phylum:
+            type: string
+            example: 'Chordata'
+
 

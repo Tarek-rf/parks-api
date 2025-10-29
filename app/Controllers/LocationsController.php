@@ -24,14 +24,13 @@ class LocationsController extends BaseController
     public function handleGetLocations(Request $request, Response $response): Response
     {
         $filters = $request->getQueryParams();
-        $page = isset($filters["page"]) && $filters["page"] > 0 ? (int)$filters["page"] : 1;
-        $page_size = isset($filters["page_size"]) && $filters["page_size"] > 0 ? (int)$filters["page_size"] : 20;
 
-        $this->locations_model->setPaginationOptions(
-            $page,
-            $page_size
-        );
+        $this->validateSortingParams($filters, $request,['id', 'name', 'country', 'area']);
+
+        $this->setPaginationParams($filters, $this->locations_model, $request);
+
         $locations = $this->locations_model->getLocations($request, $filters);
+
         return $this->renderJson($response, $locations);
     }
 

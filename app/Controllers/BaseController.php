@@ -48,7 +48,7 @@ abstract class BaseController
      * @throws \App\Exceptions\HttpOutOfRangeInputException if the input is out of range
      * @return void dose not return anything
      */
-    public function validatePaginationParams(array $filters, $request) : void {
+    public function validatePaginationParams(array $filters, $request) :bool {
         if(isset($filters["page"]) && isset($filters["page_size"]))
         {
             if(!ValidationHelper::isInt($filters["page"]))
@@ -66,7 +66,9 @@ abstract class BaseController
             if(!ValidationHelper::isIntAndInRange($filters["page_size"],1,1000)) {
                 throw new HttpOutOfRangeInputException($request, "Invalid page_size Param: must be a value between 1 and 1000");
             }
+            return true;
         }
+        return false;
     }
 
     /**
