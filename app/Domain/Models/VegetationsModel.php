@@ -56,4 +56,14 @@ class VegetationsModel extends BaseModel
         return $vegetations;
     }
 
+    public function createVegetation(array $new_vegetation): int {
+
+        // this is wrong use the method in base model
+        // $sql = "INSERT INTO vegetations VALUES (";
+
+        $this-> insert('vegetations',$new_vegetation);
+        //  $this-> update('vegetations',$existing_vegetation,["vendor_id"=>$vendor_id]);
+
+        return 0;
+    }
 }
