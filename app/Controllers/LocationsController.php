@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Domain\Models\LocationsModel;
+use App\Domain\Services\LocationsService;
 use App\Exceptions\HttpValidationException;
 use psr\Http\Message\ResponseInterface as Response;
 use psr\Http\Message\ServerRequestInterface as Request;
@@ -10,7 +11,7 @@ use Slim\Exception\HttpNotFoundException;
 
 class LocationsController extends BaseController
 {
-    function __construct(private LocationsModel $locations_model) {}
+    function __construct(private LocationsModel $locations_model, private LocationsService $locations_service) {}
 
     /**
      *
@@ -57,5 +58,26 @@ class LocationsController extends BaseController
             throw new HttpNotFoundException($request, "There was no matching record");
         }
         return $this->renderJson($response, $location);
+    }
+
+    public function handleCreateLocation(Request $request, Response $response): Response
+    {
+        //* 1) Retrieve the received payload from the request
+        $new_location = $request->getParsedBody();
+        // dd($data);
+        $result = $this->locations_service->doCreateLocation($new_location);
+        if ($result->isSuccess()) {
+            //* 1) Prepare the JSON response.
+            //$data["data"] = $result->getData();
+            return $this->renderJson($response, $result->getData(), 201);
+        }
+        //* The operation failed. Return an error response
+        $payload = [
+            "status" => "error",
+            "message" => "Failed to create the new location, refer to the details below",
+            "details" => $result->getErrors()
+        ];
+
+        return $this->renderJson($response, $payload, 400);
     }
 }

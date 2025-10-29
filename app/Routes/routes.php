@@ -21,13 +21,21 @@ return static function (Slim\App $app): void {
     // $app->add(HelloMiddleware::class);
     $app->get('/', [AboutController::class, 'handleAboutWebService']);
 
+
+
+
+
+    // Locations Routes
+    $app->get('/locations', [LocationsController::class, 'handleGetLocations']);
+
+    $app->post('/locations', [LocationsController::class, 'handleCreateLocation']);
+
+    $app->get('/locations/{id}', [LocationsController::class, 'handleGetLocationById']);
+
+
     $app->get('/animals', [AnimalsController::class, 'handleGetAnimals']);
 
     $app->get('/vegetations', [VegetationsController::class, 'handleGetVegetations']);
-
-    $app->get('/locations', [LocationsController::class, 'handleGetLocations']);
-
-    $app->get('/locations/{id}', [LocationsController::class, 'handleGetLocationById']);
 
     $app->get('/history', [HistoryController::class, 'handleGetHistory']);
 
