@@ -12,6 +12,14 @@ class LocationsController extends BaseController
 {
     function __construct(private LocationsModel $locations_model) {}
 
+    /**
+     *
+     * Handles the GET request to fetch a list of locations.
+     *
+     * @param \psr\Http\Message\ServerRequestInterface $request
+     * @param \psr\Http\Message\ResponseInterface $response
+     * @return Response
+     */
     public function handleGetLocations(Request $request, Response $response): Response
     {
         $filters = $request->getQueryParams();
@@ -26,6 +34,17 @@ class LocationsController extends BaseController
         return $this->renderJson($response, $locations);
     }
 
+    /**
+     *
+     * Handles the GET request to fetch a location by its ID.
+     *
+     * @param \psr\Http\Message\ServerRequestInterface $request
+     * @param \psr\Http\Message\ResponseInterface $response
+     * @param array $uri_args
+     * @throws \App\Exceptions\HttpValidationException
+     * @throws \Slim\Exception\HttpNotFoundException
+     * @return Response
+     */
     public function handleGetLocationById(Request $request, Response $response, array $uri_args): Response
     {
         $location_id = $uri_args["id"];
