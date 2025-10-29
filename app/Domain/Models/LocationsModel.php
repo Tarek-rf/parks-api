@@ -10,15 +10,22 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class LocationsModel extends BaseModel
 {
-    /**
-     * Creates an object of locations model
-     * @param $pdo the pdo service that contains the established DB connection
-     */
     public function __construct(PDOService $pdo)
     {
         parent::__construct($pdo);
     }
 
+    /**
+     *
+     * Fetches a list of locations based on the provided filters and sorting options.
+     *
+     * @param \Psr\Http\Message\ServerRequestInterface $request
+     * @param array $filters
+     * @throws \App\Exceptions\HttpValidationException
+     * @throws \App\Exceptions\HttpOutOfRangeInputException
+     * @throws \App\Exceptions\HttpInvalidSortingParamsException
+     * @return array
+     */
     public function getLocations(ServerRequestInterface $request, array $filters): array
     {
         $pdo_values = [];
@@ -117,6 +124,13 @@ class LocationsModel extends BaseModel
         return $locations;
     }
 
+    /**
+     *
+     * Fetches a single location by its ID.
+     *
+     * @param int $id
+     * @return mixed
+     */
     public function getLocationById(int $id): mixed
     {
         $pdo_values = [];
