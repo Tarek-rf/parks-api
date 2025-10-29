@@ -32,6 +32,10 @@ return static function (Slim\App $app): void {
 
     
     $app->get('/animals', [AnimalsController::class, 'handleGetAnimals']);
+    $app->post('/animals', [AnimalsController::class, 'handleCreateAnimal']);
+    $app->delete('/animals', [AnimalsController::class, 'handleDeleteAnimal']);
+    $app->put('/animals', [AnimalsController::class, 'handleUpdateAnimal']);
+
 
     $app->get('/vegetations', [VegetationsController::class, 'handleGetVegetations']);
 
