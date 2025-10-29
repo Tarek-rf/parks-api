@@ -15,6 +15,12 @@ class AnimalsController extends BaseController
         $this->animals_model = $animals_model;
     }
 
+    /**
+     *  Handles the animal collection and validates the sorting and pagination filters.
+     * @param \Psr\Http\Message\ServerRequestInterface $request Request
+     * @param \Psr\Http\Message\ResponseInterface $response Response
+     * @return Response JSON response
+     */
     public function handleGetAnimals(Request $request, Response $response): Response
     {
         $filters = $request->getQueryParams();
