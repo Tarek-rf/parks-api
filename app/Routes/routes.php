@@ -21,6 +21,18 @@ return static function (Slim\App $app): void {
     // $app->add(HelloMiddleware::class);
     $app->get('/', [AboutController::class, 'handleAboutWebService']);
 
+
+
+
+
+    // Locations Routes
+    $app->get('/locations', [LocationsController::class, 'handleGetLocations']);
+
+    $app->post('/locations', [LocationsController::class, 'handleCreateLocation']);
+
+    $app->get('/locations/{id}', [LocationsController::class, 'handleGetLocationById']);
+
+
     $app->get('/animals', [AnimalsController::class, 'handleGetAnimals']);
     $app->post('/animals', [AnimalsController::class, 'handleCreateAnimal']);
     $app->delete('/animals', [AnimalsController::class, 'handleDeleteAnimal']);
@@ -30,10 +42,6 @@ return static function (Slim\App $app): void {
     $app->get('/vegetations', [VegetationsController::class, 'handleGetVegetations']);
     
     $app->post('/vegetations', [VegetationsController::class, 'handleCreateVegetation']);
-
-    $app->get('/locations', [LocationsController::class, 'handleGetLocations']);
-
-    $app->get('/locations/{id}', [LocationsController::class, 'handleGetLocationById']);
 
     $app->get('/history', [HistoryController::class, 'handleGetHistory']);
     $app->Post('/history', [HistoryController::class, 'handleCreateHistory']);
