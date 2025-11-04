@@ -52,7 +52,7 @@ class HistoryController extends BaseController
         if ($result->isSuccess()) {
             // 1) Prepare the json response.
             return $this->renderJson($response, $result->getData(), 201);
-        }
+        } 
         // the operation failed, return an error response.
         $payload = [
             "status" => "error",
@@ -60,7 +60,7 @@ class HistoryController extends BaseController
             "details" => $result->getErrors()
         ];
 
-        return $this->renderJson($response, $payload, 400);
+        return $this->renderJson($response, $payload, 422);
     }
 
     public function handleUpdateHistory(Request $request, Response $response): Response

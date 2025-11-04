@@ -66,5 +66,7 @@ class HistoryModel extends BaseModel
         return $this->update("history",$existing_history, ["history_id" => 1]);
     }
 
+    
+
 
 }
