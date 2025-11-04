@@ -15,7 +15,7 @@ class AboutController extends BaseController
 
     public function handleAboutWebService(Request $request, Response $response): Response
     {
-
+        $baseUri = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'] . '/parks-api';
         $data = array(
             'api' => self::API_NAME,
             'version' => self::API_VERSION,
@@ -25,19 +25,19 @@ class AboutController extends BaseController
             ),
             'resources' => array(
                 'animals'=> array(
-                    'uri'=> '/animals',
+                    'uri'=> $baseUri.'/animals',
                     'about'=>'This will provide the animals information like name, height, weight etc...'
                 ),
                 'vegetations'=>array(
-                     'uri'=> '/vegetations',
+                     'uri'=> $baseUri.'/vegetations',
                     'about'=>'This will provide the vegetations information like name, growth rate, preferable climate etc...'
                 ),
                 'locations'=>array(
-                     'uri'=> '/locations',
+                     'uri'=> $baseUri.'/locations',
                     'about'=>'This will provide the locations information like name of the park, country, area etc...'
                 ),
                 'history'=>array(
-                     'uri'=> '/history',
+                     'uri'=> $baseUri.'/history',
                     'about'=>'This will provide the history information like founder, founded date, age of park etc...'
                 )
             )
