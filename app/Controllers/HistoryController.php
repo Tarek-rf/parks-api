@@ -39,6 +39,12 @@ class HistoryController extends BaseController
         return $this->renderJson($response, $history);
     }
 
+    /**
+     * handles the creation of a new history
+     * @param $request the request send by the client to the server
+     * @param $response the response sent by the server to the client
+     * @return Response the response to send to the client which contains the payload
+     */
     public function handleCreateHistory(Request $request, Response $response): Response
     {
         //* PROCESS A REQUEST FOR CREATING A NEW VENDOR
@@ -52,7 +58,7 @@ class HistoryController extends BaseController
         if ($result->isSuccess()) {
             // 1) Prepare the json response.
             return $this->renderJson($response, $result->getData(), 201);
-        } 
+        }
         // the operation failed, return an error response.
         $payload = [
             "status" => "error",
@@ -63,16 +69,59 @@ class HistoryController extends BaseController
         return $this->renderJson($response, $payload, 422);
     }
 
-    public function handleUpdateHistory(Request $request, Response $response): Response
+    /**
+     * handles the updating of a existing history
+     * @param $request the request send by the client to the server
+     * @param $response the response sent by the server to the client
+     * @return Response the response to send to the client which contains the payload
+     */
+    public function handleUpdateHistory(Request $request, Response $response, array $args): Response
     {
-        echo "QUACK!";
-        return $response;
+        //* PROCESS A REQUEST FOR CREATING A NEW VENDOR
+        // echo "QUACK!";
+
+        //* 1. retrieve the received payload from the request.
+        $data = $request->getParsedBody();
+        // dd($data);
+        $result = $this->history_service->doUpdateHistory($request, $data, ["id" => $args['id']]);
+
+        if ($result->isSuccess()) {
+            // 1) Prepare the json response.
+            return $this->renderJson($response, $result->getData(), 200);
+        }
+        // the operation failed, return an error response.
+        $payload = [
+            "status" => "error",
+            "message" => "failed to create the new history, refer to the details below",
+            "details" => $result->getErrors()
+        ];
+
+        return $this->renderJson($response, $payload, 422);
     }
 
-    public function handleDeleteHistory(Request $request, Response $response): Response
+    /**
+     * handles the deletion of a existing history
+     * @param $request the request send by the client to the server
+     * @param $response the response sent by the server to the client
+     * @return Response the response to send to the client which contains the payload
+     */
+    public function handleDeleteHistory(Request $request, Response $response, array $args): Response
     {
-        echo "QUACK!";
-        return $response;
+        $result = $this->history_service->doDeleteHistory($request, ["id" => $args['id']]);
+
+        if ($result->isSuccess()) {
+            // 1) Prepare the json response.
+            return $this->renderJson($response, $result->getData(), 204);
+        }
+        // the operation failed, return an error response.
+        $payload = [
+            "status" => "error",
+            "message" => "failed to create delete a history, refer to the details below",
+            "details" => $result->getErrors()
+        ];
+
+        return $this->renderJson($response, $payload, 422);
+
     }
 
 }

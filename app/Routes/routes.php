@@ -40,11 +40,13 @@ return static function (Slim\App $app): void {
 
 
     $app->get('/vegetations', [VegetationsController::class, 'handleGetVegetations']);
-    
+
     $app->post('/vegetations', [VegetationsController::class, 'handleCreateVegetation']);
 
     $app->get('/history', [HistoryController::class, 'handleGetHistory']);
-    $app->Post('/history', [HistoryController::class, 'handleCreateHistory']);
+    $app->post('/history', [HistoryController::class, 'handleCreateHistory']);
+    $app->put('/history/{id}', [HistoryController::class, 'handleUpdateHistory']);
+    $app->delete('/history/{id}', [HistoryController::class, 'handleDeleteHistory']);
 
 
     //* ROUTE: GET /ping
