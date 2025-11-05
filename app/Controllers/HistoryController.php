@@ -62,7 +62,6 @@ class HistoryController extends BaseController
         // the operation failed, return an error response.
         $payload = [
             "status" => "error",
-            "message" => "failed to create the new history, refer to the details below",
             "details" => $result->getErrors()
         ];
 
@@ -83,7 +82,7 @@ class HistoryController extends BaseController
         //* 1. retrieve the received payload from the request.
         $data = $request->getParsedBody();
         // dd($data);
-        $result = $this->history_service->doUpdateHistory($request, $data, ["id" => $args['id']]);
+        $result = $this->history_service->doUpdateHistory($data, ["id" => $args['id']]);
 
         if ($result->isSuccess()) {
             // 1) Prepare the json response.
@@ -92,7 +91,6 @@ class HistoryController extends BaseController
         // the operation failed, return an error response.
         $payload = [
             "status" => "error",
-            "message" => "failed to create the new history, refer to the details below",
             "details" => $result->getErrors()
         ];
 
@@ -105,9 +103,11 @@ class HistoryController extends BaseController
      * @param $response the response sent by the server to the client
      * @return Response the response to send to the client which contains the payload
      */
-    public function handleDeleteHistory(Request $request, Response $response, array $args): Response
+    public function handleDeleteHistory(Request $request, Response $response): Response
     {
-        $result = $this->history_service->doDeleteHistory($request, ["id" => $args['id']]);
+        $data = $request->getParsedBody();
+        // dd($data);
+        $result = $this->history_service->doDeleteHistory($data);
 
         if ($result->isSuccess()) {
             // 1) Prepare the json response.
@@ -116,7 +116,6 @@ class HistoryController extends BaseController
         // the operation failed, return an error response.
         $payload = [
             "status" => "error",
-            "message" => "failed to create delete a history, refer to the details below",
             "details" => $result->getErrors()
         ];
 

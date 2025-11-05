@@ -43,7 +43,7 @@ return static function (Slim\App $app): void {
     $app->get('/history', [HistoryController::class, 'handleGetHistory']);
     $app->post('/history', [HistoryController::class, 'handleCreateHistory']);
     $app->put('/history/{id}', [HistoryController::class, 'handleUpdateHistory']);
-    $app->delete('/history/{id}', [HistoryController::class, 'handleDeleteHistory']);
+    $app->delete('/history', [HistoryController::class, 'handleDeleteHistory']);
 
 
     //* ROUTE: GET /ping
