@@ -58,10 +58,11 @@ class AnimalsController extends BaseController
         return $this->renderJson($response, $payload, 400);
     }
 
-
-    public function handleDeleteAnimal(Request $request, Response $response, array $uri_args): Response
+    public function handleDeleteAnimal(Request $request, Response $response,): Response
     {
-        $where_condition = ['id' => $uri_args['id']];
+        $data = $request->getParsedBody();
+
+        $where_condition = ['id' => $data['id']];
 
         $result = $this->animals_service->doDeleteAnimal($where_condition);
 
@@ -100,5 +101,6 @@ class AnimalsController extends BaseController
         ];
 
         return $this->renderJson($response, $payload, 400);
+
     }
 }
