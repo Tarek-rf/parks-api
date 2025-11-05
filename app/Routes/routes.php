@@ -20,10 +20,12 @@ return static function (Slim\App $app): void {
     //* ROUTE: GET /
     // $app->add(HelloMiddleware::class);
     $app->get('/', [AboutController::class, 'handleAboutWebService']);
-    
+
     // Locations Routes
     $app->get('/locations', [LocationsController::class, 'handleGetLocations']);
     $app->post('/locations', [LocationsController::class, 'handleCreateLocation']);
+    $app->delete('/locations/{id}', [LocationsController::class, 'handleDeleteLocation']);
+    $app->put('/locations/{id}', [LocationsController::class, 'handleUpdateLocation']);
     $app->get('/locations/{id}', [LocationsController::class, 'handleGetLocationById']);
 
     // Animals Routs

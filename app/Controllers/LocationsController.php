@@ -25,7 +25,7 @@ class LocationsController extends BaseController
     {
         $filters = $request->getQueryParams();
 
-        $this->validateSortingParams($filters, $request,['id', 'name', 'country', 'area']);
+        $this->validateSortingParams($filters, $request, ['id', 'name', 'country', 'area']);
 
         $this->setPaginationParams($filters, $this->locations_model, $request);
 
@@ -74,6 +74,49 @@ class LocationsController extends BaseController
         $payload = [
             "status" => "error",
             "message" => "Failed to create the new location, refer to the details below",
+            "details" => $result->getErrors()
+        ];
+
+        return $this->renderJson($response, $payload, 400);
+    }
+
+    public function handleDeleteLocation(Request $request, Response $response, array $uri_args): Response
+    {
+        //* 1) Retrieve the location ID
+        $where_condition = ['id' => $uri_args['id']];
+
+        $result = $this->locations_service->doDeleteLocation($where_condition);
+        if ($result->isSuccess()) {
+            //* 1) Prepare the JSON response.
+            return $this->renderJson($response, $result->getData(), 202);
+        }
+        //* The operation failed. Return an error response
+        $payload = [
+            "status" => "error",
+            "message" => "Failed to delete the location, refer to the details below",
+            "details" => $result->getErrors()
+        ];
+
+        return $this->renderJson($response, $payload, 400);
+    }
+
+    public function handleUpdateLocation(Request $request, Response $response, array $uri_args): Response
+    {
+        //* Retrieve the received payload from the request
+        $data = $request->getParsedBody();
+
+        //* Retrieve the location ID
+        $where_condition = ['id' => $uri_args['id']];
+
+        $result = $this->locations_service->doUpdateLocation($data, $where_condition);
+        if ($result->isSuccess()) {
+            //* Prepare the JSON response.
+            return $this->renderJson($response, $result->getData(), 202);
+        }
+        //* The operation failed. Return an error response
+        $payload = [
+            "status" => "error",
+            "message" => "Failed to update the location, refer to the details below",
             "details" => $result->getErrors()
         ];
 
