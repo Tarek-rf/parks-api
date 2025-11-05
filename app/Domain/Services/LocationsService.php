@@ -26,4 +26,38 @@ class LocationsService
 
         return $result;
     }
+
+    public function doDeleteLocation(array $where_condition): Result
+    {
+        //TODO: Validate the id of the record to be deleted from the collection.
+
+        //* If the fields are valid -> Delete the record from DB
+        $affected_rows = $this->locations_model->deleteLocation($where_condition);
+
+        //* Returning a successful operation
+        $result = Result::success("The location was deleted successfully", ["affected rows" => $affected_rows]);
+
+        //* Returning a failed operation
+        $errors[] = "There was an error during the deletion operation";
+        $failed_result = Result::failure("The location could not be deleted", $errors);
+
+        return $result;
+    }
+
+    public function doUpdateLocation(array $data, array $where_condition): Result
+    {
+        //TODO: Validate the fields of the item and the where conditions to be updated in the collection.
+
+        //* If the fields are valid -> update the record in the DB
+        $affected_rows = $this->locations_model->updateLocation($data[0], $where_condition);
+
+        //* Returning a successful operation
+        $result = Result::success("The location was updated successfully", ["affected rows" => $affected_rows]);
+
+        //* Returning a failed operation
+        $errors[] = "There was an error during the deletion operation";
+        $failed_result = Result::failure("The location could not be deleted", $errors);
+
+        return $result;
+    }
 }

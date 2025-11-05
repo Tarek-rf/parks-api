@@ -155,4 +155,14 @@ class LocationsModel extends BaseModel
         // return $this->update('locations', $existing_location, ["location_id" => $location_id]);
 
     }
+
+    public function deleteLocation(array $where_condition): int
+    {
+        return $this->delete('locations', $where_condition);
+    }
+
+    public function updateLocation(array $data, array $where_condition): int
+    {
+        return $this->update('locations', $data, $where_condition);
+    }
 }
