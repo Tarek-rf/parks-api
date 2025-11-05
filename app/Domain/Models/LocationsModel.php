@@ -2,7 +2,6 @@
 
 namespace App\Domain\Models;
 
-use App\Exceptions\HttpInvalidSortingParamsException;
 use App\Exceptions\HttpOutOfRangeInputException;
 use App\Exceptions\HttpValidationException;
 use App\Helpers\Core\PDOService;
@@ -91,19 +90,7 @@ class LocationsModel extends BaseModel
 
         //Sorting
         $sortBy = strtolower($filters['sort_by'] ?? 'id');
-        $order = strtolower($filters['order'] ?? 'asc');
-        $validSortBy = ['id', 'name', 'country', 'area'];
-        $validOrder = ['asc', 'desc'];
-
-        //Validate sort fields
-        if (!in_array($sortBy, $validSortBy)) {
-            throw new HttpInvalidSortingParamsException($request, "Invalid sort_by value: Should be one of " . implode(", ", $validSortBy));
-        }
-        //Validate sort order
-        if (!in_array($order, $validOrder)) {
-            throw new HttpInvalidSortingParamsException($request, "Invalid order value: Should be one of " . implode(", ", $validOrder));
-        }
-        $order = strtoupper($order);
+        $order = strtoupper($filters['order'] ?? 'asc');
 
         //Field mapping
         $fieldMapping = [

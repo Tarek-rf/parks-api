@@ -67,7 +67,6 @@ class LocationsController extends BaseController
         $result = $this->locations_service->doCreateLocation($new_location);
         if ($result->isSuccess()) {
             //* 1) Prepare the JSON response.
-            //$data["data"] = $result->getData();
             return $this->renderJson($response, $result->getData(), 201);
         }
         //* The operation failed. Return an error response
