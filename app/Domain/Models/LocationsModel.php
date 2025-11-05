@@ -133,7 +133,13 @@ class LocationsModel extends BaseModel
 
         return $location;
     }
-
+    /**
+     *
+     * Creates a new Location in the DB
+     *
+     * @param array $new_location
+     * @return int
+     */
     public function createLocation(array $new_location): int
     {
 
@@ -142,12 +148,26 @@ class LocationsModel extends BaseModel
         // return $this->update('locations', $existing_location, ["location_id" => $location_id]);
 
     }
-
-    public function deleteLocation(array $where_condition): int
+    /**
+     *
+     * Deletes a Location from the DB
+     *
+     * @param int $location_id
+     * @return int
+     */
+    public function deleteLocations(int $location_id): int
     {
-        return $this->delete('locations', $where_condition);
+        $location_ids['id'] = $location_id;
+        return $this->delete('locations', $location_ids);
     }
-
+    /**
+     *
+     * Updates a Location in the DB
+     *
+     * @param array $data
+     * @param array $where_condition
+     * @return int
+     */
     public function updateLocation(array $data, array $where_condition): int
     {
         return $this->update('locations', $data, $where_condition);

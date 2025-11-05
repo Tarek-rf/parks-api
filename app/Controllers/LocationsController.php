@@ -58,7 +58,14 @@ class LocationsController extends BaseController
         }
         return $this->renderJson($response, $location);
     }
-
+    /**
+     *
+     * Handles the POST request to create a new location.
+     *
+     * @param \psr\Http\Message\ServerRequestInterface $request
+     * @param \psr\Http\Message\ResponseInterface $response
+     * @return Response
+     */
     public function handleCreateLocation(Request $request, Response $response): Response
     {
         //* 1) Retrieve the received payload from the request
@@ -78,13 +85,20 @@ class LocationsController extends BaseController
 
         return $this->renderJson($response, $payload, 400);
     }
-
-    public function handleDeleteLocation(Request $request, Response $response, array $uri_args): Response
+    /**
+     *
+     * Handles the DELETE request to delete one or more locations.
+     *
+     * @param \psr\Http\Message\ServerRequestInterface $request
+     * @param \psr\Http\Message\ResponseInterface $response
+     * @return Response
+     */
+    public function handleDeleteLocation(Request $request, Response $response): Response
     {
         //* 1) Retrieve the location ID
-        $where_condition = ['id' => $uri_args['id']];
+        $location_ids = $request->getParsedBody();
 
-        $result = $this->locations_service->doDeleteLocation($where_condition);
+        $result = $this->locations_service->doDeleteLocation($location_ids);
         if ($result->isSuccess()) {
             //* 1) Prepare the JSON response.
             return $this->renderJson($response, $result->getData(), 202);
@@ -98,7 +112,15 @@ class LocationsController extends BaseController
 
         return $this->renderJson($response, $payload, 400);
     }
-
+    /**
+     *
+     * Handles the PUT request to update an existing location.
+     *
+     * @param \psr\Http\Message\ServerRequestInterface $request
+     * @param \psr\Http\Message\ResponseInterface $response
+     * @param array $uri_args
+     * @return Response
+     */
     public function handleUpdateLocation(Request $request, Response $response, array $uri_args): Response
     {
         //* Retrieve the received payload from the request
