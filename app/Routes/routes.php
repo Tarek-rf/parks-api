@@ -24,7 +24,7 @@ return static function (Slim\App $app): void {
     // Locations Routes
     $app->get('/locations', [LocationsController::class, 'handleGetLocations']);
     $app->post('/locations', [LocationsController::class, 'handleCreateLocation']);
-    $app->delete('/locations/{id}', [LocationsController::class, 'handleDeleteLocation']);
+    $app->delete('/locations', [LocationsController::class, 'handleDeleteLocation']);
     $app->put('/locations/{id}', [LocationsController::class, 'handleUpdateLocation']);
     $app->get('/locations/{id}', [LocationsController::class, 'handleGetLocationById']);
 
