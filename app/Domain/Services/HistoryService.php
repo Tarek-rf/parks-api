@@ -7,7 +7,7 @@ use App\Helpers\Core\Result;
 use App\Validation\Validator;
 use Slim\Exception\HttpNotFoundException;
 
-class HistoryService
+class HistoryService extends BaseService
 {
     public function __construct(private HistoryModel $history_model) {}
 
@@ -21,8 +21,6 @@ class HistoryService
      */
     public function doCreateHistory(array $new_history): Result
     {
-        $validator = new Validator($new_history[0]);
-
         $rules = [
             'location_id' => [
                 'required',
@@ -63,10 +61,9 @@ class HistoryService
             ],
         ];
 
-        $validator->mapFieldsRules($rules);
 
-
-        if ($validator->validate()) {
+        $valid = $this->validateInput($new_history[0], $rules);
+        if ($valid ===  true) {
             //* 1) if the fields are valid -> insert them into DB
             $last_inserted_id = $this->history_model->createHistory($new_history[0]);
 
@@ -81,7 +78,7 @@ class HistoryService
             );
         } else {
             //* returning a failed operation:
-            $errors[] = $validator->errors();
+            $errors[] = $valid;
             $result = Result::failure("The new History has had an error!", $errors);
         }
 
@@ -100,7 +97,6 @@ class HistoryService
     public function doUpdateHistory(array $updated_history, array $updated_history_id): Result
     {
         //TODO: Validate the fields of the new item to be added to the collection
-        $validator = new Validator($updated_history[0]);
 
         $rules = [
             'location_id' => [
@@ -141,9 +137,8 @@ class HistoryService
             ],
         ];
 
-        $validator->mapFieldsRules($rules);
+        $valid = $this->validateInput($updated_history[0], $rules);
 
-        $id_validator = new Validator($updated_history_id);
 
         $id_rules = [
             'id' => [
@@ -153,17 +148,17 @@ class HistoryService
             ],
         ];
 
-        $id_validator->mapFieldsRules($id_rules);
 
+        $valid_id = $this->validateInput($updated_history_id, $id_rules);
 
-        if ($validator->validate() && $id_validator->validate()) {
+        if ($valid === true && $valid_id === true) {
             //* 1) if the fields are valid -> insert them into DB
             $rowAffected = $this->history_model->updateHistory($updated_history[0], $updated_history_id);
             if ($rowAffected == 0) {
                 $id = $updated_history_id['id'];
                 $result = Result::failure("The updated History has had an error!", [
                     "status" => "Failure",
-                    "message" => "The updated History has had an error since ID: $id dose not exist "
+                    "message" => "The updated History has had an error so it was not able to be updated "
                 ]);
             } else {
                 //* returning a successful operation:
@@ -177,7 +172,7 @@ class HistoryService
             }
         } else {
             //* returning a failed operation:
-            $errors[] = $validator->errors();
+            $errors[] = $valid;
             $result = Result::failure("The updated History has had an error!", $errors);
         }
 
@@ -194,9 +189,6 @@ class HistoryService
      */
     public function doDeleteHistory(array $history_to_delete): Result
     {
-
-        $validator = new Validator(["id" => $history_to_delete[0]]);
-
         $rules = [
             'id' => [
                 'required',
@@ -206,10 +198,10 @@ class HistoryService
             ],
         ];
 
-        $validator->mapFieldsRules($rules);
+        $valid = $this->validateInput(["id" => $history_to_delete[0]], $rules);
 
 
-        if ($validator->validate()) {
+        if ($valid === true) {
             //* 1) if the fields are valid -> insert them into DB
             $rowAffected = $this->history_model->deleteHistory(["id" => $history_to_delete[0]]);
 
@@ -231,7 +223,7 @@ class HistoryService
             }
         } else {
             //* returning a failed operation:
-            $errors[] = $validator->errors();
+            $errors[] = $valid;
             $result = Result::failure("The History has had an error!", $errors);
         }
 
