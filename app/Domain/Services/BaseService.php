@@ -16,10 +16,16 @@ abstract class BaseService
 {
     //*NOTES: This class is not used yet. It is a placeholder for future services.
     //*NOTES: Here, you can define common methods for all services such as logging, validation, etc.
-    protected function validateInput(array $data, array $rules) {
+    /**
+     * Validates the data passed by checking if it respects the validation rules
+     * @param array $data the data to be validated
+     * @param array $rules the validation rules to be respected
+     */
+    protected function validateInput(array $data, array $rules)
+    {
         $validator = new Validator($data);
         $validator->mapFieldsRules($rules);
-        if(!$validator->validate()) {
+        if (!$validator->validate()) {
             return $validator->errors();
         }
         return true;

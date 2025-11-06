@@ -36,8 +36,9 @@ return static function (Slim\App $app): void {
 
     // Vegetations Routs
     $app->get('/vegetations', [VegetationsController::class, 'handleGetVegetations']);
-
     $app->post('/vegetations', [VegetationsController::class, 'handleCreateVegetation']);
+    $app->delete('/vegetations', [VegetationsController::class, 'handleDeleteVegetation']);
+    $app->put('/vegetations/{id}', [VegetationsController::class, 'handleUpdateVegetation']);
 
     // History Routs
     $app->get('/history', [HistoryController::class, 'handleGetHistory']);
