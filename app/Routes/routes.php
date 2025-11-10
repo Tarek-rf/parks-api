@@ -21,19 +21,30 @@ return static function (Slim\App $app): void {
     // $app->add(HelloMiddleware::class);
     $app->get('/', [AboutController::class, 'handleAboutWebService']);
 
+    // Locations Routes
+    $app->get('/locations', [LocationsController::class, 'handleGetLocations']);
+    $app->post('/locations', [LocationsController::class, 'handleCreateLocation']);
+    $app->delete('/locations', [LocationsController::class, 'handleDeleteLocation']);
+    $app->put('/locations/{id}', [LocationsController::class, 'handleUpdateLocation']);
+    $app->get('/locations/{id}', [LocationsController::class, 'handleGetLocationById']);
+
+    // Animals Routs
     $app->get('/animals', [AnimalsController::class, 'handleGetAnimals']);
     $app->post('/animals', [AnimalsController::class, 'handleCreateAnimal']);
     $app->delete('/animals', [AnimalsController::class, 'handleDeleteAnimal']);
     $app->put('/animals/{id}', [AnimalsController::class, 'handleUpdateAnimal']);
 
-
+    // Vegetations Routs
     $app->get('/vegetations', [VegetationsController::class, 'handleGetVegetations']);
+    $app->post('/vegetations', [VegetationsController::class, 'handleCreateVegetation']);
+    $app->delete('/vegetations', [VegetationsController::class, 'handleDeleteVegetation']);
+    $app->put('/vegetations/{id}', [VegetationsController::class, 'handleUpdateVegetation']);
 
-    $app->get('/locations', [LocationsController::class, 'handleGetLocations']);
-
-    $app->get('/locations/{id}', [LocationsController::class, 'handleGetLocationById']);
-
+    // History Routs
     $app->get('/history', [HistoryController::class, 'handleGetHistory']);
+    $app->post('/history', [HistoryController::class, 'handleCreateHistory']);
+    $app->put('/history/{id}', [HistoryController::class, 'handleUpdateHistory']);
+    $app->delete('/history', [HistoryController::class, 'handleDeleteHistory']);
 
 
     //* ROUTE: GET /ping

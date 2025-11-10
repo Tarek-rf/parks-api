@@ -57,4 +57,34 @@ class HistoryModel extends BaseModel
         return $history;
     }
 
+    /**
+     * creates a new history by calling the parents insert function
+     * @param array $new_history the values of the new history to be inserted
+     * @return int the id of the inserted history
+     */
+    public function createHistory(array $new_history): int {
+        return $this->insert("history",$new_history);
+    }
+
+    /**
+     * updates a existing history by passing new values and id to the parents update function
+     * @param array $updated_history the values of the updated history
+     * @param array $history_id the id of the history to update
+     * @return int the number of rows affected
+     */
+    public function updateHistory(array $updated_history,array $history_id ): int {
+        // last param should be the where condition  so the id primary key
+        return $this->update("history",$updated_history, $history_id);
+    }
+
+    /**
+     * deletes an existing history by the id by calling parent delete function
+     * @param array $existing_history_id the id of the exiting history to delete
+     * @return int the number of rows affected 
+     */
+    public function deleteHistory(array $existing_history_id): int {
+        return $this->delete("history",$existing_history_id);
+    }
+
+
 }

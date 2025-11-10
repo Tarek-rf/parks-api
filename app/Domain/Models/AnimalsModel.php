@@ -32,9 +32,10 @@ class AnimalsModel extends BaseModel
 
         //filter by diet
         if (isset($filters["diet"]) && !empty($filters["diet"])) {
-            $query .= " AND diet LIKE CONCAT('%', :animal_diet , '%')";
-            $pdo_values["animal_diet "] = $filters["diet"];
+            $query .= " AND diet LIKE CONCAT('%', :animal_diet, '%')";
+            $pdo_values["animal_diet"] = $filters["diet"];
         }
+
 
         //filter by family name
         if (isset($filters["family"]) && !empty($filters["family"])) {
@@ -45,6 +46,7 @@ class AnimalsModel extends BaseModel
         if (isset($filters["sort_by"]) && !empty($filters["sort_by"]) && isset($filters["order"]) && !empty($filters["order"])) {
             $query .= " ORDER BY {$filters["sort_by"]} {$filters["order"]}";
         }
+
 
         $animals = $this->paginate($query, $pdo_values);
 
