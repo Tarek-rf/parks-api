@@ -58,14 +58,49 @@ class AnimalsController extends BaseController
         return $this->renderJson($response, $payload, 400);
     }
 
-
-    public function handleDeleteAnimal(Request $request, Response $response): Response
+    public function handleDeleteAnimal(Request $request, Response $response,): Response
     {
-        return $response;
+        $data = $request->getParsedBody();
+
+        $where_condition = ['id' => $data['id']];
+
+        $result = $this->animals_service->doDeleteAnimal($where_condition);
+
+        if ($result->isSuccess()) {
+            $data["data"] = $result->getData();
+            return $this->renderJson($response, $data, 202);
+        }
+
+        $payload = [
+            "status" => "error",
+            "message" => "Failed to delete the location, refer to the details below",
+            "details" => $result->getErrors()
+        ];
+
+        return $this->renderJson($response, $payload, 400);
     }
 
-    public function handleUpdateAnimal(Request $request, Response $response): Response
+    public function handleUpdateAnimal(Request $request, Response $response, array $uri_args): Response
     {
-        return $response;
+
+        $data = $request->getParsedBody();
+
+        $where_condition = ['id' => $uri_args['id']];
+
+        $result = $this->animals_service->doUpdateAnimal($data, $where_condition);
+
+        if ($result->isSuccess()) {
+            $data = $result->getData();
+            return $this->renderJson($response, $data, 202);
+        }
+
+        $payload = [
+            "code" => "error",
+            "message" => "Failed to update an animal, refer to the details below",
+            "details" => $result->getErrors()
+        ];
+
+        return $this->renderJson($response, $payload, 400);
+
     }
 }

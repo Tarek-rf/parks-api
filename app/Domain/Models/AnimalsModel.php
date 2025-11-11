@@ -83,6 +83,17 @@ class AnimalsModel extends BaseModel
     {
 
         return $this->insert("animals", $new_animal);
-        //return $this->update("animals", $existing_animal, ["id" => $id]);
+    }
+
+    public function updateAnimal(array $updated_animal, array $condition): int
+    {
+
+        return $this->update("animals", $updated_animal, $condition);
+    }
+
+    public function deleteAnimal(array $condition): int
+    {
+
+        return $this->delete("animals", $condition);
     }
 }
