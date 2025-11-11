@@ -63,6 +63,56 @@ paths:
           description: Bad Request
         "404":
           description: Not Found
+    post:
+      description: Add a new history
+      requestBody:
+        description: Create a new pet in the store
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                  $ref: '#/components/schemas/HistoryPost'
+        required: true
+      responses:
+        '201':
+          description: Created
+        '422':
+          description: Unprocessable Entity
+    delete:
+      description: delete a history
+      requestBody:
+        description: deletes a history
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                  type: integer
+            example: [1,]
+        required: true
+      responses:
+        '204':
+          description: No Content
+        '422':
+          description: Unprocessable Entity
+  /history/{id}:
+    put:
+      description: update a history
+      requestBody:
+        description: update a history
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                  $ref: '#/components/schemas/HistoryPost'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+        '422':
+          description: Unprocessable Entity
   /locations:
     get:
       description: 'Get the list of national parks locations'
@@ -283,6 +333,44 @@ components:
           type: integer
           format: int64
           example: 1
+        location_id:
+          type: integer
+          format: int64
+          example: 1
+        founder:
+          type: string
+          example: Matthew
+        lastName:
+          type: string
+          example: James
+        founded_date:
+          type: string
+          example: '2005-01-12'
+        most_interesting_fact:
+          type: string
+          example: 'oldest oak trees exist here'
+        major_historic_accident:
+          type: string
+          example: '1980 landslide'
+        age_of_park:
+          type: integer
+          format: int64
+          example: 20
+        was_native_land:
+          type: integer
+          format: int64
+          example: 1
+        preservation_laws_enacted:
+          type: string
+          example: 'Forest Act 1950'
+        significant_restoration_year:
+          type: integer
+          format: int64
+          example: 2010
+    HistoryPost:
+      x-parks-router-model: io.parks-api.model.History
+      type: object
+      properties:
         location_id:
           type: integer
           format: int64

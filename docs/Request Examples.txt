@@ -1,0 +1,49 @@
+History:
+
+Get: http://localhost/parks-api/history
+
+POST: http://localhost/parks-api/history
+
+[
+	{
+		  "location_id": 5,
+		  "founder": "J. Philips",
+		  "founded_date": "2005-06-12",
+		  "most_interesting_fact": "Old-growth wood",
+		  "major_historic_accident": "1999 landslide near west ridge",
+		  "age_of_park": 20,
+		  "was_native_land": 1,
+		  "preservation_laws_enacted": "Forest Act 2000; Wildlife Act 1975",
+		  "significant_restoration_year": 2023
+	}
+]
+
+PUT: http://localhost/parks-api/history/81
+
+[
+	{
+		  "location_id": 2,
+		  "founder": "J. Philips",
+		  "founded_date": "2005-06-12",
+		  "most_interesting_fact": "Old-growth wood",
+		  "major_historic_accident": "1999 landslide near west ridge",
+		  "age_of_park": 20,
+		  "was_native_land": 1,
+		  "preservation_laws_enacted": "Forest Act 2000; Wildlife Act 1975",
+		  "significant_restoration_year": 2020
+	}
+]
+
+DELETE: http://localhost/parks-api/history
+
+[
+    82,83,90
+]
+
+Vegetations:
+
+
+Animals:
+
+
+Locations:
