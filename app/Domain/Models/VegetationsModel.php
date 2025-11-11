@@ -56,14 +56,32 @@ class VegetationsModel extends BaseModel
         return $vegetations;
     }
 
+    /**
+     * Creates a new vegetation by calling the insert function in base model
+     * @param array $new_vegetation the values of the new vegetation to be inserted
+     * @return int the id of the inserted vegetation
+     */
     public function createVegetation(array $new_vegetation): int {
 
-        // this is wrong use the method in base model
-        // $sql = "INSERT INTO vegetations VALUES (";
+        return $this-> insert('vegetations',$new_vegetation);
+    }
 
-        $this-> insert('vegetations',$new_vegetation);
-        //  $this-> update('vegetations',$existing_vegetation,["vendor_id"=>$vendor_id]);
+    /**
+     * Updates a existing vegetation by passing new values and id to the update function in base model
+     * @param array $to_update the values of the vegetation to be updated
+     * @param array $vegetation_id the id of the vegetation to be updated
+     * @return int the number of rows updated
+     */
+     public function updateVegetation(array $to_update,array $vegetation_id): int {
+        return $this-> update('vegetations',$to_update,$vegetation_id);
+    }
 
-        return 0;
+    /**
+     * deletes an existing vegetation by passing the id and calling the delete function in base model
+     * @param array $vegetation_id the id of the exiting vegetation to be deleted
+     * @return int the number of rows deleted
+     */
+     public function deleteVegetation(array $vegetation_id): int {
+        return $this-> delete('vegetations',$vegetation_id);
     }
 }

@@ -2,7 +2,6 @@
 
 namespace App\Domain\Models;
 
-use App\Exceptions\HttpInvalidSortingParamsException;
 use App\Exceptions\HttpOutOfRangeInputException;
 use App\Exceptions\HttpValidationException;
 use App\Helpers\Core\PDOService;
@@ -91,19 +90,7 @@ class LocationsModel extends BaseModel
 
         //Sorting
         $sortBy = strtolower($filters['sort_by'] ?? 'id');
-        $order = strtolower($filters['order'] ?? 'asc');
-        $validSortBy = ['id', 'name', 'country', 'area'];
-        $validOrder = ['asc', 'desc'];
-
-        //Validate sort fields
-        if (!in_array($sortBy, $validSortBy)) {
-            throw new HttpInvalidSortingParamsException($request, "Invalid sort_by value: Should be one of " . implode(", ", $validSortBy));
-        }
-        //Validate sort order
-        if (!in_array($order, $validOrder)) {
-            throw new HttpInvalidSortingParamsException($request, "Invalid order value: Should be one of " . implode(", ", $validOrder));
-        }
-        $order = strtoupper($order);
+        $order = strtoupper($filters['order'] ?? 'asc');
 
         //Field mapping
         $fieldMapping = [
@@ -146,7 +133,13 @@ class LocationsModel extends BaseModel
 
         return $location;
     }
-
+    /**
+     *
+     * Creates a new Location in the DB
+     *
+     * @param array $new_location
+     * @return int
+     */
     public function createLocation(array $new_location): int
     {
 
@@ -154,5 +147,29 @@ class LocationsModel extends BaseModel
         return $this->insert('locations', $new_location);
         // return $this->update('locations', $existing_location, ["location_id" => $location_id]);
 
+    }
+    /**
+     *
+     * Deletes a Location from the DB
+     *
+     * @param int $location_id
+     * @return int
+     */
+    public function deleteLocations(int $location_id): int
+    {
+        $location_ids['id'] = $location_id;
+        return $this->delete('locations', $location_ids);
+    }
+    /**
+     *
+     * Updates a Location in the DB
+     *
+     * @param array $data
+     * @param array $where_condition
+     * @return int
+     */
+    public function updateLocation(array $data, array $where_condition): int
+    {
+        return $this->update('locations', $data, $where_condition);
     }
 }
