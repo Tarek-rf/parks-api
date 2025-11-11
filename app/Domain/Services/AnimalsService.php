@@ -6,7 +6,7 @@ use App\Domain\Models\AnimalsModel;
 use App\Helpers\Core\Result;
 use App\Validation\Validator;
 
-class AnimalsService
+class AnimalsService extends BaseService
 {
     public function __construct(private AnimalsModel $animals_model) {}
 
@@ -53,17 +53,15 @@ class AnimalsService
 
         );
 
-        $validator = new Validator($new_animals[0]);
+        $valid = $this->validateInput($new_animals[0], $rules);
 
-        $validator->mapFieldsRules($rules);
-
-        if ($validator->validate()) {
+        if ($valid === true) {
             $last_inserted_id = $this->animals_model->createAnimal($new_animals[0]);
 
             // returning a successful operation
             $result = Result::success("The animal was created successfully!", ["last_inserted_id" => $last_inserted_id]);
         } else {
-            $errors[] = $validator->errors();
+            $errors[] = $valid;
             $result = Result::failure("The animal was not created", $errors);
         }
         return $result;
@@ -103,7 +101,7 @@ class AnimalsService
             ],
             'diet' => [
                 'required',
-                array('in', array("carnivore", "cerbivore", "omnivore"))
+                array('in', array("carnivore", "herbivore", "omnivore"))
             ],
             'phylum' => [
                 array('lengthBetween', 2, 80)
@@ -111,19 +109,38 @@ class AnimalsService
 
         );
 
-        $validator = new Validator($update_animal[0]);
+        $valid = $this->validateInput($update_animal[0], $rules);
 
-        $validator->mapFieldsRules($rules);
+        $rules_id = [
+            'id' => [
+                'integer',
+                ['min', 1],
+                ['max', 99999],
+            ]
+        ];
 
-        if ($validator->validate()) {
+        $valid_id = $this->validateInput($condition, $rules_id);
+
+        if ($valid === true && $valid_id === true) {
             $last_updated_id = $this->animals_model->updateAnimal($update_animal[0], $condition);
 
-            $result = Result::success("The animal was updated successfully!", ["last_updated_id" => $last_updated_id]);
-        } else {
-            $errors[] = $validator->errors();
-            $result = Result::failure("The animal could not be updated with the given ID", $errors);
-        }
+            if ($last_updated_id == 0) {
+                $id = $condition['id'];
+                $result = Result::failure("The animal could not be updated with the given ID", [
+                    "status" => "Failure",
+                    "message" => "The updated animal has had an error so it was not able to be updated. "
+                ]);
+            } else {
 
+                $result = Result::success("The animal was updated successfully!", [
+                    "status" => "Success",
+                    "message" => "Successfully updated a history"
+                ]);
+            }
+        } else {
+            $errors[] = $valid;
+            $result = Result::failure("The updated animal has had an error!", $errors);
+        }
         return $result;
     }
 
@@ -133,20 +150,34 @@ class AnimalsService
         $rules = [
             "id" => [
                 'required',
-                'integer'
+                'integer',
+                ['min', 1],
+                ['max', 99999]
             ]
         ];
 
-        $validator = new Validator($condition);
+        $valid = $this->validateInput(['id' => $condition[0]], $rules);
 
-        $validator->mapFieldsRules($rules);
+        if ($valid === true) {
+            $rowsAffected = $this->animals_model->deleteAnimal(["id" => $condition[0]]);
 
-        if ($validator->validate()) {
-            $last_deleted_id = $this->animals_model->deleteAnimal($condition);
-
-            $result = Result::success("The animal was deleted successfully", ["last_deleted_id" => $last_deleted_id]);
+            if ($rowsAffected == 0) {
+                $id = $condition[0];
+                $result = Result::failure("The deleted animal has had an error!", [
+                    "status" => "Failure",
+                    "message" => "The deleted animal has had an error since ID: $id dose not exist "
+                ]);
+            } else {
+                $result = Result::success(
+                    "The animals was deleted successfully",
+                    [
+                        "status" => "Success",
+                        "message" => "Successfully deleted animals"
+                    ]
+                );
+            }
         } else {
-            $errors[] = $validator->errors();
+            $errors[] = $valid;
             $result = Result::failure("Could not delete the animal with the given ID", $errors);
         }
 
