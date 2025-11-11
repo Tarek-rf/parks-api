@@ -62,13 +62,11 @@ class AnimalsController extends BaseController
     {
         $data = $request->getParsedBody();
 
-        $where_condition = ['id' => $data['id']];
-
-        $result = $this->animals_service->doDeleteAnimal($where_condition);
+        $result = $this->animals_service->doDeleteAnimal($data);
 
         if ($result->isSuccess()) {
             $data["data"] = $result->getData();
-            return $this->renderJson($response, $data, 202);
+            return $this->renderJson($response, $data, 204);
         }
 
         $payload = [
@@ -77,7 +75,7 @@ class AnimalsController extends BaseController
             "details" => $result->getErrors()
         ];
 
-        return $this->renderJson($response, $payload, 400);
+        return $this->renderJson($response, $payload, 422);
     }
 
     public function handleUpdateAnimal(Request $request, Response $response, array $uri_args): Response
@@ -100,7 +98,6 @@ class AnimalsController extends BaseController
             "details" => $result->getErrors()
         ];
 
-        return $this->renderJson($response, $payload, 400);
-
+        return $this->renderJson($response, $payload, 422);
     }
 }
