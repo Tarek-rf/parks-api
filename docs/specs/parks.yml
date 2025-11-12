@@ -66,7 +66,7 @@ paths:
     post:
       description: Add a new history
       requestBody:
-        description: Create a new pet in the store
+        description: Adds a new history
         content:
           application/json:
             schema:
@@ -316,13 +316,63 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Aniamls'
+                  $ref: '#/components/schemas/Animals'
         '400':
           description: Bad Request
         '401':
           description: Unauthorized
         '404':
           description: Not Found
+    post:
+      description: Add a new animal
+      requestBody:
+        description: Creates a new animal
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/AnimalsPost'
+        required: true
+      responses:
+        '201':
+          description: Created
+        '422':
+          description: Unprocessable Entity
+    delete:
+      description: delete an animal
+      requestBody:
+        description: deletes an animal
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                  type: integer
+            example: [3]
+        required: true
+      responses:
+        '204':
+          description: No Content
+        '422':
+          description: Unprocessable Entity
+  /animals/{id}:
+    put:
+      description: update an animal
+      requestBody:
+        description: updates an animal
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/AnimalsPost'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+        '422':
+          description: Unprocessable Entity
 components:
   schemas:
     History:
@@ -486,7 +536,7 @@ components:
         is_invasive:
           type: number
           example: 0
-    Aniamls:
+    Animals:
         x-parks-router-model: io.parks-api.model.Animal
         type: object
         properties:
@@ -508,7 +558,7 @@ components:
             example: Felidae
           conservation_status:
             type: string
-            example: 'least concern'
+            example: 'least_concern'
           average_weight:
             type: number
             example: 4.54
@@ -517,9 +567,38 @@ components:
             example: 46
           diet:
             type: string
-            example: 'Carnivore'
+            example: 'carnivore'
           phylum:
             type: string
             example: 'Chordata'
-
-
+    AnimalsPost:
+        x-parks-router-model: io.parks-api.model.Animal
+        type: object
+        properties:
+          common_name:
+            type: string
+            example: Cat
+          scientific_name:
+            type: string
+            example: 'Felis catus'
+          class_name:
+            type: string
+            example: Mammalia
+          family_name:
+            type: string
+            example: Felidae
+          conservation_status:
+            type: string
+            example: 'least_concern'
+          average_weight:
+            type: number
+            example: 4.54
+          average_height:
+            type: number
+            example: 46
+          diet:
+            type: string
+            example: 'carnivore'
+          phylum:
+            type: string
+            example: 'Chordata'

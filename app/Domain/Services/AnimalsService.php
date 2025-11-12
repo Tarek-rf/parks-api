@@ -4,14 +4,16 @@ namespace App\Domain\Services;
 
 use App\Domain\Models\AnimalsModel;
 use App\Helpers\Core\Result;
-use App\Validation\Validator;
 
 class AnimalsService extends BaseService
 {
     public function __construct(private AnimalsModel $animals_model) {}
 
-    //METHODs to perform the crud operations INCLUDING the input validation step.
-
+    /**
+     * Validates the inputs before inserting to the database
+     * @param array $new_animals The new information about the animal
+     * @return Result The result
+     */
     public function doCreateAnimal(array $new_animals): Result
     {
         $rules = array(
@@ -67,6 +69,12 @@ class AnimalsService extends BaseService
         return $result;
     }
 
+    /**
+     * Validates the information before updating the animal based on the given ID
+     * @param array $update_animal The new fields being updated
+     * @param array $condition The animal id
+     * @return Result The result
+     */
     public function doUpdateAnimal(array $update_animal, array $condition): Result
     {
 
@@ -144,6 +152,11 @@ class AnimalsService extends BaseService
         return $result;
     }
 
+    /**
+     * Validates the id before deleting the animal from the database
+     * @param array $condition the animal id
+     * @return Result The result
+     */
     public function doDeleteAnimal(array $condition): Result
     {
 
