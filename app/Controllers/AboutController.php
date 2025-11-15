@@ -30,7 +30,13 @@ class AboutController extends BaseController
                 ),
                 'vegetations'=>array(
                      'uri'=> $baseUri.'/vegetations',
-                    'about'=>'This will provide the vegetations information like name, growth rate, preferable climate etc...'
+                    'about'=>'This will provide the vegetations information like name, growth rate, preferable climate etc...',
+                    'methods'=> array(
+                        'GET'=> 'Fetches the list of vegetations',
+                        'POST' => 'Creates a new Vegetation',
+                        'PUT'=> 'Update a bew Vegetation',
+                        'DELETE'=>'Deletes a new Vegetation'
+                    )
                 ),
                 'locations'=>array(
                      'uri'=> $baseUri.'/locations',
