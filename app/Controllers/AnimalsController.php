@@ -17,7 +17,7 @@ class AnimalsController extends BaseController
     }
 
     /**
-     *  Handles the animal collection and validates the sorting and pagination filters.
+     * Handles the animal collection and validates the sorting and pagination filters.
      * @param \Psr\Http\Message\ServerRequestInterface $request Request
      * @param \Psr\Http\Message\ResponseInterface $response Response
      * @return Response JSON response
@@ -35,6 +35,12 @@ class AnimalsController extends BaseController
         return $this->renderJson($response, $animals);
     }
 
+    /**
+     * Handles the create animals from the request body.
+     * @param \Psr\Http\Message\ServerRequestInterface $request
+     * @param \Psr\Http\Message\ResponseInterface $response
+     * @return Response
+     */
     public function handleCreateAnimal(Request $request, Response $response): Response
     {
         $data = $request->getParsedBody();
@@ -42,7 +48,7 @@ class AnimalsController extends BaseController
         $result = $this->animals_service->doCreateAnimal($data);
 
         if ($result->isSuccess()) {
-            $data["data"] = $result->getData();
+            $data = $result->getData();
             return $this->renderJson($response, $data, 201);
         }
 
@@ -54,21 +60,24 @@ class AnimalsController extends BaseController
             "details" => $result->getErrors()
         ];
 
-
         return $this->renderJson($response, $payload, 400);
     }
 
+    /**
+     * Handles the delete animal from the request body
+     * @param \Psr\Http\Message\ServerRequestInterface $request Request
+     * @param \Psr\Http\Message\ResponseInterface $response Response
+     * @return Response JSON response
+     */
     public function handleDeleteAnimal(Request $request, Response $response,): Response
     {
         $data = $request->getParsedBody();
 
-        $where_condition = ['id' => $data['id']];
-
-        $result = $this->animals_service->doDeleteAnimal($where_condition);
+        $result = $this->animals_service->doDeleteAnimal($data);
 
         if ($result->isSuccess()) {
             $data["data"] = $result->getData();
-            return $this->renderJson($response, $data, 202);
+            return $this->renderJson($response, $data, 204);
         }
 
         $payload = [
@@ -77,9 +86,16 @@ class AnimalsController extends BaseController
             "details" => $result->getErrors()
         ];
 
-        return $this->renderJson($response, $payload, 400);
+        return $this->renderJson($response, $payload, 422);
     }
 
+    /**
+     * Handles the update animals from the request body
+     * @param \Psr\Http\Message\ServerRequestInterface $request Request
+     * @param \Psr\Http\Message\ResponseInterface $response Response
+     * @param array $uri_args URI arguments
+     * @return Response JSON response
+     */
     public function handleUpdateAnimal(Request $request, Response $response, array $uri_args): Response
     {
 
@@ -100,7 +116,6 @@ class AnimalsController extends BaseController
             "details" => $result->getErrors()
         ];
 
-        return $this->renderJson($response, $payload, 400);
-
+        return $this->renderJson($response, $payload, 422);
     }
 }

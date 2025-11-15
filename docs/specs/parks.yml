@@ -66,7 +66,7 @@ paths:
     post:
       description: Add a new history
       requestBody:
-        description: Create a new pet in the store
+        description: Adds a new history
         content:
           application/json:
             schema:
@@ -89,7 +89,7 @@ paths:
               type: array
               items:
                   type: integer
-            example: [1,]
+              example: [1,]
         required: true
       responses:
         '204':
@@ -184,6 +184,56 @@ paths:
           description: Unprocessable Entity
         '404':
           description: Not Found
+    post:
+      description: Add a new location
+      requestBody:
+        description: Adds a new location
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                  $ref: '#/components/schemas/LocationPost'
+        required: true
+      responses:
+        '201':
+          description: Created
+        '400':
+          description: Bad Request
+    delete:
+      description: delete one or more locations
+      requestBody:
+        description: deletes one or more locations
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: integer
+                example: [1,2]
+        required: true
+      responses:
+        '202':
+          description: Accepted
+        '400':
+          description: Bad Request
+  /locations/{id}:
+    put:
+      description: update a location
+      requestBody:
+        description: updates a location
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                  $ref: '#/components/schemas/LocationPost'
+        required: true
+      responses:
+        '202':
+          description: Accepted
+        '400':
+          description: Bad Request
   /vegetations:
     get:
       description: 'Get the list of vegetation '
@@ -250,10 +300,58 @@ paths:
                   $ref: '#/components/schemas/Vegetations'
         '400':
           description: Bad Request
-        '401':
-          description: Unauthorized
         '404':
           description: Not Found
+    post:
+      description: Add a new vegetation
+      requestBody:
+        description: Creates a new vegetation
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                  $ref: '#/components/schemas/VegetationsPost'
+        required: true
+      responses:
+        '201':
+          description: Created
+        '400':
+          description: Bad Request
+    delete:
+      description: Delete a vegetation
+      requestBody:
+        description:  Deletes a vegetation
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                  type: integer
+              example: [12]
+        required: true
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+  /vegetations/{id}:
+    put:
+      description: Update a vegetation
+      requestBody:
+        description: Update a vegetation
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                  $ref: '#/components/schemas/VegetationsPost'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+        '400':
+          description: Bad Request
   /animals:
     get:
       description: 'Get the list of animals'
@@ -316,13 +414,63 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Aniamls'
+                  $ref: '#/components/schemas/Animals'
         '400':
           description: Bad Request
         '401':
           description: Unauthorized
         '404':
           description: Not Found
+    post:
+      description: Add a new animal
+      requestBody:
+        description: Creates a new animal
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/AnimalsPost'
+        required: true
+      responses:
+        '201':
+          description: Created
+        '422':
+          description: Unprocessable Entity
+    delete:
+      description: delete an animal
+      requestBody:
+        description: deletes an animal
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                  type: integer
+            example: [3]
+        required: true
+      responses:
+        '204':
+          description: No Content
+        '422':
+          description: Unprocessable Entity
+  /animals/{id}:
+    put:
+      description: update an animal
+      requestBody:
+        description: updates an animal
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/AnimalsPost'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+        '422':
+          description: Unprocessable Entity
 components:
   schemas:
     History:
@@ -448,6 +596,45 @@ components:
             type: string
             format: uri
             example: 'https://mapleridge.example'
+    LocationPost:
+      x-parks-router-model: io.parks-api.model.Location
+      type: object
+      properties:
+        name:
+          type: string
+          example: 'Example New Park'
+        country:
+          type: string
+          example: 'Canada'
+        province:
+          type: string
+          example: 'Quebec'
+        address:
+          type: string
+          example: '123 Example Rd'
+        latitude:
+          type: number
+          format: float
+          example: '49.282700'
+        longitude:
+          type: number
+          format: float
+          example: '-123.120700'
+        area_km2:
+          type: number
+          format: float
+          example: 111.23
+        max_elevation_m:
+          type: integer
+          format: int64
+          example: 2222
+        continent:
+          type: string
+          example: 'North America'
+        website:
+          type: string
+          format: uri
+          example: 'https://newparkexample.example'
     Vegetations:
       x-parks-router-model: io.parks-api.model.Vegetation
       type: object
@@ -486,7 +673,41 @@ components:
         is_invasive:
           type: number
           example: 0
-    Aniamls:
+    VegetationsPost:
+      x-parks-router-model: io.parks-api.model.Vegetation
+      type: object
+      properties:
+        species_name:
+          type: string
+          example: 'Common Reed'
+        type:
+          type: string
+          example: grass
+        scientific_name:
+          type: string
+          example: 'Phragmites australis'
+        climate_pref:
+          type: string
+          example: 'temperate'
+        conservation_status:
+          type: string
+          example: 'secure'
+        avg_canopy_diameter_m:
+          type: number
+          example: 5.50
+        growth_rate:
+          type: string
+          example: 'slow'
+        bloom_season:
+          type: string
+          example: null
+        soil_preference:
+          type: string
+          example: 'peaty'
+        is_invasive:
+          type: number
+          example: 0
+    Animals:
         x-parks-router-model: io.parks-api.model.Animal
         type: object
         properties:
@@ -508,7 +729,7 @@ components:
             example: Felidae
           conservation_status:
             type: string
-            example: 'least concern'
+            example: 'least_concern'
           average_weight:
             type: number
             example: 4.54
@@ -517,9 +738,38 @@ components:
             example: 46
           diet:
             type: string
-            example: 'Carnivore'
+            example: 'carnivore'
           phylum:
             type: string
             example: 'Chordata'
-
-
+    AnimalsPost:
+        x-parks-router-model: io.parks-api.model.Animal
+        type: object
+        properties:
+          common_name:
+            type: string
+            example: Cat
+          scientific_name:
+            type: string
+            example: 'Felis catus'
+          class_name:
+            type: string
+            example: Mammalia
+          family_name:
+            type: string
+            example: Felidae
+          conservation_status:
+            type: string
+            example: 'least_concern'
+          average_weight:
+            type: number
+            example: 4.54
+          average_height:
+            type: number
+            example: 46
+          diet:
+            type: string
+            example: 'carnivore'
+          phylum:
+            type: string
+            example: 'Chordata'
