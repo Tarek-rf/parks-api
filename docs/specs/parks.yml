@@ -89,7 +89,7 @@ paths:
               type: array
               items:
                   type: integer
-            example: [1,]
+              example: [1,]
         required: true
       responses:
         '204':
@@ -184,6 +184,56 @@ paths:
           description: Unprocessable Entity
         '404':
           description: Not Found
+    post:
+      description: Add a new location
+      requestBody:
+        description: Adds a new location
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                  $ref: '#/components/schemas/LocationPost'
+        required: true
+      responses:
+        '201':
+          description: Created
+        '400':
+          description: Bad Request
+    delete:
+      description: delete one or more locations
+      requestBody:
+        description: deletes one or more locations
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: integer
+                example: [1,2]
+        required: true
+      responses:
+        '202':
+          description: Accepted
+        '400':
+          description: Bad Request
+  /locations/{id}:
+    put:
+      description: update a location
+      requestBody:
+        description: updates a location
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                  $ref: '#/components/schemas/LocationPost'
+        required: true
+      responses:
+        '202':
+          description: Accepted
+        '400':
+          description: Bad Request
   /vegetations:
     get:
       description: 'Get the list of vegetation '
@@ -498,6 +548,45 @@ components:
             type: string
             format: uri
             example: 'https://mapleridge.example'
+    LocationPost:
+      x-parks-router-model: io.parks-api.model.Location
+      type: object
+      properties:
+        name:
+          type: string
+          example: 'Example New Park'
+        country:
+          type: string
+          example: 'Canada'
+        province:
+          type: string
+          example: 'Quebec'
+        address:
+          type: string
+          example: '123 Example Rd'
+        latitude:
+          type: number
+          format: float
+          example: '49.282700'
+        longitude:
+          type: number
+          format: float
+          example: '-123.120700'
+        area_km2:
+          type: number
+          format: float
+          example: 111.23
+        max_elevation_m:
+          type: integer
+          format: int64
+          example: 2222
+        continent:
+          type: string
+          example: 'North America'
+        website:
+          type: string
+          format: uri
+          example: 'https://newparkexample.example'
     Vegetations:
       x-parks-router-model: io.parks-api.model.Vegetation
       type: object
