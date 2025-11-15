@@ -200,10 +200,58 @@ paths:
                   $ref: '#/components/schemas/Vegetations'
         '400':
           description: Bad Request
-        '401':
-          description: Unauthorized
         '404':
           description: Not Found
+    post:
+      description: Add a new vegetation
+      requestBody:
+        description: Creates a new vegetation
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                  $ref: '#/components/schemas/VegetationsPost'
+        required: true
+      responses:
+        '201':
+          description: Created
+        '400':
+          description: Bad Request
+    delete:
+      description: Delete a vegetation
+      requestBody:
+        description:  Deletes a vegetation
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                  type: integer
+              example: [12]
+        required: true
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+  /vegetations/{id}:
+    put:
+      description: Update a vegetation
+      requestBody:
+        description: Update a vegetation
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                  $ref: '#/components/schemas/VegetationsPost'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+        '400':
+          description: Bad Request
   /animals:
     get:
       description: 'Get the list of animals'
@@ -398,7 +446,41 @@ components:
         is_invasive:
           type: number
           example: 0
-    Aniamls:
+    VegetationsPost:
+      x-parks-router-model: io.parks-api.model.Vegetation
+      type: object
+      properties:
+        species_name:
+          type: string
+          example: 'Common Reed'
+        type:
+          type: string
+          example: grass
+        scientific_name:
+          type: string
+          example: 'Phragmites australis'
+        climate_pref:
+          type: string
+          example: 'temperate'
+        conservation_status:
+          type: string
+          example: 'secure'
+        avg_canopy_diameter_m:
+          type: number
+          example: 5.50
+        growth_rate:
+          type: string
+          example: 'slow'
+        bloom_season:
+          type: string
+          example: null
+        soil_preference:
+          type: string
+          example: 'peaty'
+        is_invasive:
+          type: number
+          example: 0
+    Animals:
         x-parks-router-model: io.parks-api.model.Animal
         type: object
         properties:
