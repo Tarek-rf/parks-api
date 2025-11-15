@@ -26,7 +26,13 @@ class AboutController extends BaseController
             'resources' => array(
                 'animals'=> array(
                     'uri'=> $baseUri.'/animals',
-                    'about'=>'This will provide the animals information like name, height, weight etc...'
+                    'about'=>'This will provide the animals information like name, height, weight etc...',
+                    'methods'=> array(
+                        'GET'=> 'Fetches the list of Animals',
+                        'POST' => 'Creates a new Animal',
+                        'PUT'=> 'Update an Animal',
+                        'DELETE'=>'Deletes an Animal'
+                    )
                 ),
                 'vegetations'=>array(
                      'uri'=> $baseUri.'/vegetations',
@@ -34,17 +40,29 @@ class AboutController extends BaseController
                     'methods'=> array(
                         'GET'=> 'Fetches the list of vegetations',
                         'POST' => 'Creates a new Vegetation',
-                        'PUT'=> 'Update a bew Vegetation',
-                        'DELETE'=>'Deletes a new Vegetation'
+                        'PUT'=> 'Update a Vegetation',
+                        'DELETE'=>'Deletes a Vegetation'
                     )
                 ),
                 'locations'=>array(
                      'uri'=> $baseUri.'/locations',
-                    'about'=>'This will provide the locations information like name of the park, country, area etc...'
+                    'about'=>'This will provide the locations information like name of the park, country, area etc...',
+                    'methods'=> array(
+                        'GET'=> 'Fetches the list of Locations',
+                        'POST' => 'Creates a new Location',
+                        'PUT'=> 'Update a Location',
+                        'DELETE'=>'Deletes a Location'
+                    )
                 ),
                 'history'=>array(
                      'uri'=> $baseUri.'/history',
-                    'about'=>'This will provide the history information like founder, founded date, age of park etc...'
+                    'about'=>'This will provide the history information like founder, founded date, age of park etc...',
+                    'methods'=> array(
+                        'GET'=> 'Fetches the list of History',
+                        'POST' => 'Creates a new History',
+                        'PUT'=> 'Update a History',
+                        'DELETE'=>'Deletes a History'
+                    )
                 )
             )
         );
