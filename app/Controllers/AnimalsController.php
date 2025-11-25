@@ -6,6 +6,7 @@ use App\Domain\Models\AnimalsModel;
 use App\Domain\Services\AnimalsService;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use Monolog\Logger;
 
 class AnimalsController extends BaseController
 {
@@ -117,5 +118,25 @@ class AnimalsController extends BaseController
         ];
 
         return $this->renderJson($response, $payload, 422);
+    }
+
+    public function handleLogRequestInfo(Resquet $request, Response $response): Response {
+
+        $log_record = "{$request->getMethod()} {$reqest->getUri()->getPath()}";
+        
+        LogHelper::logAccess($log_record, $reqest->getQueryParams());
+
+        $payload = ["message" => "hello"];
+        return $this->renderJson($response, $payload);
+    }
+
+    public function handleLogRequestError(Resquet $request, Response $response): Response {
+
+        $log_record = "{$request->getMethod()} {$reqest->getUri()->getPath()}";
+        
+        LogHelper::logError($log_record, $reqest->getQueryParams());
+
+        $payload = ["message" => "hello"];
+        return $this->renderJson($response, $payload);
     }
 }
