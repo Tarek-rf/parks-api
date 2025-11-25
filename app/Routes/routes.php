@@ -33,6 +33,7 @@ return static function (Slim\App $app): void {
     $app->post('/animals', [AnimalsController::class, 'handleCreateAnimal']);
     $app->delete('/animals', [AnimalsController::class, 'handleDeleteAnimal']);
     $app->put('/animals/{id}', [AnimalsController::class, 'handleUpdateAnimal']);
+    $app->get('/log',[AnimalsController::class, 'handleLogRequestInfo']);
 
     // Vegetations Routs
     $app->get('/vegetations', [VegetationsController::class, 'handleGetVegetations']);

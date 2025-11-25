@@ -10,6 +10,7 @@ class LogHelper
 
     public static function logAccess(string $log_record, array $extra)
     {
+
         $logger = new Logger('access');
 
         $log_file_path = APP_LOGS_DIR . DIRECTORY_SEPARATOR . "access.log";
