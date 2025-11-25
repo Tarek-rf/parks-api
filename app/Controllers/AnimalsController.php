@@ -6,6 +6,11 @@ use App\Domain\Models\AnimalsModel;
 use App\Domain\Services\AnimalsService;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+<<<<<<< Updated upstream
+=======
+use Monolog\Logger;
+use App\Helpers\LogHelper;
+>>>>>>> Stashed changes
 
 class AnimalsController extends BaseController
 {
@@ -100,4 +105,8 @@ class AnimalsController extends BaseController
 
         return $this->renderJson($response, $payload, 422);
     }
+<<<<<<< Updated upstream
+=======
+    
+>>>>>>> Stashed changes
 }
