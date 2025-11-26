@@ -7,6 +7,7 @@ use App\Helpers\DateTimeHelper;
 use App\Controllers\AnimalsController;
 use App\Controllers\HistoryController;
 use App\Controllers\LocationsController;
+use App\Controllers\UserAuthController;
 use App\Controllers\VegetationsController;
 use App\Middleware\HelloMiddleware;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -33,7 +34,7 @@ return static function (Slim\App $app): void {
     $app->post('/animals', [AnimalsController::class, 'handleCreateAnimal']);
     $app->delete('/animals', [AnimalsController::class, 'handleDeleteAnimal']);
     $app->put('/animals/{id}', [AnimalsController::class, 'handleUpdateAnimal']);
-    $app->get('/log',[AnimalsController::class, 'handleLogRequestInfo']);
+    $app->get('/log', [AnimalsController::class, 'handleLogRequestInfo']);
 
     // Vegetations Routs
     $app->get('/vegetations', [VegetationsController::class, 'handleGetVegetations']);
@@ -62,4 +63,8 @@ return static function (Slim\App $app): void {
     $app->get('/error', function (Request $request, Response $response, $args) {
         throw new \Slim\Exception\HttpNotFoundException($request, "Something went wrong");
     });
+
+    $app->post('/login', [UserAuthController::class, 'handleGenerateJwt']);
+    $app->post('/register', [UserAuthController::class, 'handleRegisterUser']);
+
 };
