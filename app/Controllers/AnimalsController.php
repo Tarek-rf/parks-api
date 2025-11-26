@@ -4,17 +4,18 @@ namespace App\Controllers;
 
 use App\Domain\Models\AnimalsModel;
 use App\Domain\Services\AnimalsService;
+use App\Helpers\Core\AppSettings;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Monolog\Logger;
 use App\Helpers\LogHelper;
-
+use Firebase\JWT\JWT;
 
 class AnimalsController extends BaseController
 {
     private AnimalsModel $animals_model;
 
-    public function __construct(AnimalsModel $animals_model, private AnimalsService $animals_service)
+    public function __construct(AnimalsModel $animals_model, private AnimalsService $animals_service, private AppSettings $app_settings)
     {
         $this->animals_model = $animals_model;
     }
@@ -121,4 +122,5 @@ class AnimalsController extends BaseController
 
         return $this->renderJson($response, $payload, 422);
     }
+
 }
