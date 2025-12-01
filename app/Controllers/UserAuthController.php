@@ -11,6 +11,7 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use Monolog\Logger;
 use App\Helpers\LogHelper;
 use Firebase\JWT\JWT;
+use Slim\Exception\HttpBadRequestException;
 
 class UserAuthController extends BaseController
 {
@@ -49,27 +50,36 @@ class UserAuthController extends BaseController
     {
         // 1) get the user info from the request code
 
-        
+        $body = $request->getParsedBody();
+        $email = $body["email"];
 
+        $model = $this->user_model->getUser($email);
         //2) Verify the credentials -> password trait
+        if (!$model) {
+            throw new HttpBadRequestException($request, "the email is not found");
+        }
+
+        if(!$this->isPasswordValid($body["password"], $model["password"])){
+            throw new HttpBadRequestException($request, "the Password is not good");
+        }
         //  use passwordtrait
 
         //3) Valid credentials -> generate a JWT token
 
         // 3 a) Generate a JWT Token
 
-        $exp_time = time() + 60; // expires in 1 min
+        $exp_time = time() + 3600; // expires in 1 hour
         $payload = [
-            "iss" => "Your web service",
+            "iss" => "Parks API",
             "iat" => time(),
             "exp" => $exp_time,
-            "aud" => "whatever",
+            "aud" => "Anyone",
             "sub" => "whatever",
             //"nbf"=> "Your web service",
             //private claims
-            "role" => "admin",
-            "user_id" => "Your web service",
-            "email" => "aaaaaa@gmail.com",
+            "role" => $model["role"],
+            "user_id" => $model["user_id"],
+            "email" => $model["email"],
 
 
         ];
