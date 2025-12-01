@@ -11,10 +11,7 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use Monolog\Logger;
 use App\Helpers\LogHelper;
 use Firebase\JWT\JWT;
-<<<<<<< HEAD
 use Slim\Exception\HttpBadRequestException;
-=======
->>>>>>> 6df8ed1c62bd9c97cd3589a8bd83ed217e21b1be
 
 class UserAuthController extends BaseController
 {
@@ -53,7 +50,6 @@ class UserAuthController extends BaseController
     {
         // 1) get the user info from the request code
 
-<<<<<<< HEAD
         $body = $request->getParsedBody();
         $email = $body["email"];
 
@@ -66,18 +62,12 @@ class UserAuthController extends BaseController
         if(!$this->isPasswordValid($body["password"], $model["password"])){
             throw new HttpBadRequestException($request, "the Password is not good");
         }
-=======
-        
-
-        //2) Verify the credentials -> password trait
->>>>>>> 6df8ed1c62bd9c97cd3589a8bd83ed217e21b1be
         //  use passwordtrait
 
         //3) Valid credentials -> generate a JWT token
 
         // 3 a) Generate a JWT Token
 
-<<<<<<< HEAD
         $exp_time = time() + 3600; // expires in 1 hour
         $payload = [
             "iss" => "Parks API",
@@ -90,20 +80,6 @@ class UserAuthController extends BaseController
             "role" => $model["role"],
             "user_id" => $model["user_id"],
             "email" => $model["email"],
-=======
-        $exp_time = time() + 60; // expires in 1 min
-        $payload = [
-            "iss" => "Your web service",
-            "iat" => time(),
-            "exp" => $exp_time,
-            "aud" => "whatever",
-            "sub" => "whatever",
-            //"nbf"=> "Your web service",
-            //private claims
-            "role" => "admin",
-            "user_id" => "Your web service",
-            "email" => "aaaaaa@gmail.com",
->>>>>>> 6df8ed1c62bd9c97cd3589a8bd83ed217e21b1be
 
 
         ];

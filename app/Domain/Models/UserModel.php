@@ -17,15 +17,13 @@ class UserModel extends BaseModel
 
         return $this->insert("ws_users", $new_user);
     }
-<<<<<<< HEAD
 
-    public function getUser(string $email) : mixed {
+    public function getUser(string $email): mixed
+    {
         $pdo_values = ['email' => $email];
         $query = "SELECT * FROM ws_users WHERE 1";
         $condition = " AND email = :email";
         $query = $query . $condition;
         return $this->fetchSingle($query, $pdo_values);
     }
-=======
->>>>>>> 6df8ed1c62bd9c97cd3589a8bd83ed217e21b1be
 }
