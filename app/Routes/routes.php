@@ -21,7 +21,7 @@ return static function (Slim\App $app): void {
 
     //* ROUTE: GET /
 
-    $app->group("", function($group) {
+    $app->group("", function ($group) {
         // $app->add(HelloMiddleware::class);
         $group->get('/', [AboutController::class, 'handleAboutWebService']);
 
@@ -71,4 +71,7 @@ return static function (Slim\App $app): void {
     $app->post('/login', [UserAuthController::class, 'handleGenerateJwt']);
     $app->post('/register', [UserAuthController::class, 'handleRegisterUser']);
 
+
+    $app->post('/login', [UserAuthController::class, 'handleGenerateJwt']);
+    $app->post('/register', [UserAuthController::class, 'handleRegisterUser']);
 };
