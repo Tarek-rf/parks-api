@@ -2,6 +2,7 @@
 
 namespace App\Middleware;
 
+use App\Domain\Models\LogModel;
 use App\Exceptions\HttpNotAcceptableException;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
@@ -12,6 +13,8 @@ use App\Helpers\LogHelper;
 
 class MessageLogMiddleware implements MiddlewareInterface
 {
+    public function __construct(private LogModel $log_model)
+    {}
 
     /**
      * Process an incoming server request and verify application/json media type.
