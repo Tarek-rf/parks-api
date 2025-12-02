@@ -11,6 +11,7 @@ use App\Controllers\UserAuthController;
 use App\Controllers\VegetationsController;
 use App\Middleware\AuthMiddleware;
 use App\Middleware\HelloMiddleware;
+use App\Middleware\MessageLogMiddleware;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
@@ -50,7 +51,7 @@ return static function (Slim\App $app): void {
         $group->post('/history', [HistoryController::class, 'handleCreateHistory']);
         $group->put('/history/{id}', [HistoryController::class, 'handleUpdateHistory']);
         $group->delete('/history', [HistoryController::class, 'handleDeleteHistory']);
-    })->add(AuthMiddleware::class); //comment this out for assign2
+    })->add(MessageLogMiddleware::class)->add(AuthMiddleware::class); //comment this out for assign2
 
 
     //* ROUTE: GET /ping
@@ -68,10 +69,6 @@ return static function (Slim\App $app): void {
         throw new \Slim\Exception\HttpNotFoundException($request, "Something went wrong");
     });
 
-    $app->post('/login', [UserAuthController::class, 'handleGenerateJwt']);
-    $app->post('/register', [UserAuthController::class, 'handleRegisterUser']);
-
-
-    $app->post('/login', [UserAuthController::class, 'handleGenerateJwt']);
-    $app->post('/register', [UserAuthController::class, 'handleRegisterUser']);
+    $app->post('/login', [UserAuthController::class, 'handleGenerateJwt'])->add(MessageLogMiddleware::class);
+    $app->post('/register', [UserAuthController::class, 'handleRegisterUser'])->add(MessageLogMiddleware::class);
 };

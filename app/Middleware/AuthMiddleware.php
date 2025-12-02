@@ -12,14 +12,14 @@ use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Slim\Exception\HttpBadRequestException;
+use Slim\Exception\HttpForbiddenException;
 use stdClass;
 use UnexpectedValueException;
 
 class AuthMiddleware implements MiddlewareInterface
 {
 
-    public function __construct(private AppSettings $app_settings)
-    {}
+    public function __construct(private AppSettings $app_settings) {}
     /**
      * Process an incoming server request and verify application/json media type.
      *
@@ -30,21 +30,39 @@ class AuthMiddleware implements MiddlewareInterface
         //* ...Before middleware!
         $headerValueArray = $request->getHeader('Authorization');
 
-        $jwt = substr($headerValueArray[0],7);
-        var_dump($jwt);
+        $jwt = substr($headerValueArray[0], 7);
+
         $keys = $this->app_settings->get('secret');
 
-        var_dump($keys);
+        // var_dump($keys);
+        // dd($keys);
         try {
-            $decoded = JWT::decode($jwt, $keys);
+
+            $decoded = (array) JWT::decode($jwt, new Key($keys, 'HS256'));
+            // dd("da fuaw");
             // $decoded = json_decode(json_encode($decoded), true);
-            // $decoded_array = (array) $decoded;
-            // var_dump($decoded_array['role']);
+            //var_dump($decoded['role']);
+            $role = $decoded['role'];
+
+            //get the method of request
+            $method = $request->getMethod();
+            //check role if user tries to do POST, PUT, DELETE throw an error
+            //if()
+            if ($role != 'admin' && $method != 'GET') {
+                throw new HttpForbiddenException($request, "You shall not pass MALAKA!");
+            }
+
+            $request = $request->withAttribute('email', $decoded["email"]);
+            // dd($request);
+            $request = $request->withAttribute('user_id', $decoded["user_id"]);
         } catch (LogicException $e) {
             throw new HttpBadRequestException($request, "LogicException");
         } catch (UnexpectedValueException $e) {
             throw new HttpBadRequestException($request, $e->getMessage());
         }
+
+
+
 
 
 
