@@ -10,11 +10,13 @@ use App\Middleware\MessageLogMiddleware;
 
 return function (App $app) {
     //TODO: Add your middleware here.
+
     $app->add(ContentNegotiationMiddleware::class);
+    // $app->add(MessageLogMiddleware::class);
     $app->addBodyParsingMiddleware();
     $app->addRoutingMiddleware();
 
-    $app->add(MessageLogMiddleware::class);
+
 
 
     //!NOTE: the error handling middleware MUST be added last.

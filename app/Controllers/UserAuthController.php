@@ -59,7 +59,7 @@ class UserAuthController extends BaseController
             throw new HttpBadRequestException($request, "the email is not found");
         }
 
-        if(!$this->isPasswordValid($body["password"], $model["password"])){
+        if (!$this->isPasswordValid($body["password"], $model["password"])) {
             throw new HttpBadRequestException($request, "the Password is not good");
         }
         //  use passwordtrait
@@ -87,8 +87,11 @@ class UserAuthController extends BaseController
         //4) return a JSON response including a JWT token
         $secret = $this->app_settings->get('secret');
 
+
         $jwt = JWT::encode($payload, $secret, 'HS256');
+        dd($jwt);
         $jwt_payload = [
+
             "status" => "success",
             "message" => "The JWT was generated successfully!",
             "jwt" => $jwt
