@@ -5,6 +5,7 @@ declare(strict_types=1);
 use App\Controllers\AboutController;
 use App\Helpers\DateTimeHelper;
 use App\Controllers\AnimalsController;
+use App\Controllers\DogBMIController;
 use App\Controllers\HistoryController;
 use App\Controllers\LocationsController;
 use App\Controllers\UserAuthController;
@@ -51,7 +52,12 @@ return static function (Slim\App $app): void {
         $group->post('/history', [HistoryController::class, 'handleCreateHistory']);
         $group->put('/history/{id}', [HistoryController::class, 'handleUpdateHistory']);
         $group->delete('/history', [HistoryController::class, 'handleDeleteHistory']);
-    })->add(MessageLogMiddleware::class)->add(AuthMiddleware::class); //comment this out for assign2
+    })
+    // ->add(MessageLogMiddleware::class)->add(AuthMiddleware::class)
+    ; //comment this out for assign2
+
+
+    $app->post('/dogBMI', [DogBMIController::class, 'handleCalculateDogBMI']);
 
 
     //* ROUTE: GET /ping
