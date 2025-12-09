@@ -15,9 +15,7 @@ use Slim\Exception\HttpBadRequestException;
 
 class DogBMIController extends BaseController
 {
-    public function __construct() {
-
-    }
+    public function __construct() {}
 
     /**
      * handles the post of getting the distance by between the postal codes and returns a response with the distance
@@ -30,12 +28,12 @@ class DogBMIController extends BaseController
     {
 
         $body = $request->getParsedBody();
-        if(!isset($body["height_unit"])|| !isset($body["height"])||!isset($body["weight_unit"]) || !isset($body["weight"]) || empty($body["height_unit"])|| empty($body["height"])||empty($body["weight_unit"]) || empty($body["weight"])) {
+        if (!isset($body["height_unit"]) || !isset($body["height"]) || !isset($body["weight_unit"]) || !isset($body["weight"]) || empty($body["height_unit"]) || empty($body["height"]) || empty($body["weight_unit"]) || empty($body["weight"])) {
             throw new HttpBadRequestException($request, "One of the required body fields is missing");
         }
 
 
-        if (in_array(strtolower($body["height_unit"]), ["in","cm","m"]) && in_array(strtolower($body["weight_unit"]),["kg","lb","g"] ) ){
+        if (in_array(strtolower($body["height_unit"]), ["in", "cm", "m"]) && in_array(strtolower($body["weight_unit"]), ["kg", "lb", "g"])) {
 
             $height = $body["height"];
             if ($body["height_unit"] === 'cm') {
@@ -51,11 +49,10 @@ class DogBMIController extends BaseController
                 $weight = $weight * 2.205;
             }
 
-            $data = ["BMI for the dog that weights " . $body["weight"] . $body["weight_unit"] ." and height of " . $body["height"] . $body["height_unit"] => round($weight/$height, 2)];
-    
+            $data = ["BMI for the dog that weights " . $body["weight"] . $body["weight_unit"] . " and height of " . $body["height"] . $body["height_unit"] => round($weight / $height, 2)];
+
             return $this->renderJson($response, $data);
         }
-        throw new HttpBadRequestException($request,"the unit of mesurement is invalid: only kg, lb, g, in, cm, and m are suported");
+        throw new HttpBadRequestException($request, "the unit of measurement is invalid: only kg, lb, g, in, cm, and m are supported");
     }
-
 }
