@@ -1,3 +1,4 @@
+
 <?php
 
 declare(strict_types=1);
@@ -9,6 +10,7 @@ use App\Controllers\DogBMIController;
 use App\Controllers\CatBMIController;
 use App\Controllers\HistoryController;
 use App\Controllers\LocationsController;
+use App\Controllers\SoilCalculatorController;
 use App\Controllers\UserAuthController;
 use App\Controllers\VegetationsController;
 use App\Middleware\AuthMiddleware;
@@ -61,6 +63,7 @@ return static function (Slim\App $app): void {
     $app->post('/dogBMI', [DogBMIController::class, 'handleCalculateDogBMI']);
     $app->post('/catBMI', [CatBMIController::class, 'handleCalculateCatBMI']);
 
+    $app->post('/soil', [SoilCalculatorController::class, 'handleSoilCalculator']);
 
     //* ROUTE: GET /ping
     $app->get('/ping', function (Request $request, Response $response, $args) {
