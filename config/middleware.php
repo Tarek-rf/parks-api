@@ -12,7 +12,7 @@ return function (App $app) {
     //TODO: Add your middleware here.
 
     $app->add(ContentNegotiationMiddleware::class);
-    // $app->add(MessageLogMiddleware::class);
+    $app->add(MessageLogMiddleware::class);
     $app->addBodyParsingMiddleware();
     $app->addRoutingMiddleware();
 

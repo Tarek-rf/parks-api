@@ -55,9 +55,7 @@ return static function (Slim\App $app): void {
         $group->post('/history', [HistoryController::class, 'handleCreateHistory']);
         $group->put('/history/{id}', [HistoryController::class, 'handleUpdateHistory']);
         $group->delete('/history', [HistoryController::class, 'handleDeleteHistory']);
-    })
-        // ->add(MessageLogMiddleware::class)->add(AuthMiddleware::class)
-    ; //comment this out for assign2
+    })->add(MessageLogMiddleware::class)->add(AuthMiddleware::class); //comment this out for assign2
 
 
     $app->post('/dogBMI', [DogBMIController::class, 'handleCalculateDogBMI']);
