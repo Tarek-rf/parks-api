@@ -11,6 +11,7 @@ use App\Controllers\CatBMIController;
 use App\Controllers\HistoryController;
 use App\Controllers\LocationsController;
 use App\Controllers\SoilCalculatorController;
+use App\Controllers\UserAuthController;
 use App\Controllers\VegetationsController;
 use App\Middleware\AuthMiddleware;
 use App\Middleware\HelloMiddleware;
