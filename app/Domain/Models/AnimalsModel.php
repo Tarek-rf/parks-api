@@ -79,10 +79,37 @@ class AnimalsModel extends BaseModel
     }
     */
 
+    /**
+     * Creates an animal and inserts it into the database
+     * @param array $new_animal array of the fields for the new animal
+     * @return int the id of the last inserted animal
+     */
     public function createAnimal(array $new_animal): int
     {
 
         return $this->insert("animals", $new_animal);
-        //return $this->update("animals", $existing_animal, ["id" => $id]);
+    }
+
+    /**
+     * Updates an animal by the given ID
+     * @param array $updated_animal The fields of the updated info
+     * @param array $condition The id
+     * @return int The last inserted id
+     */
+    public function updateAnimal(array $updated_animal, array $condition): int
+    {
+
+        return $this->update("animals", $updated_animal, $condition);
+    }
+
+    /**
+     * Deletes an animal from the database based on the given ID
+     * @param array $condition the Id
+     * @return int latest id deleted
+     */
+    public function deleteAnimal(array $condition): int
+    {
+
+        return $this->delete("animals", $condition);
     }
 }
