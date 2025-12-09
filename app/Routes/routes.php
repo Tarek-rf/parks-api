@@ -1,3 +1,4 @@
+
 <?php
 
 declare(strict_types=1);
@@ -7,6 +8,7 @@ use App\Helpers\DateTimeHelper;
 use App\Controllers\AnimalsController;
 use App\Controllers\HistoryController;
 use App\Controllers\LocationsController;
+use App\Controllers\SoilCalculatorController;
 use App\Controllers\VegetationsController;
 use App\Middleware\HelloMiddleware;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -32,7 +34,7 @@ return static function (Slim\App $app): void {
     $app->get('/animals', [AnimalsController::class, 'handleGetAnimals']);
     $app->post('/animals', [AnimalsController::class, 'handleCreateAnimal']);
     $app->delete('/animals', [AnimalsController::class, 'handleDeleteAnimal']);
-    $app->put('/animals', [AnimalsController::class, 'handleUpdateAnimal']);
+    $app->put('/animals/{id}', [AnimalsController::class, 'handleUpdateAnimal']);
 
     // Vegetations Routs
     $app->get('/vegetations', [VegetationsController::class, 'handleGetVegetations']);
@@ -46,6 +48,7 @@ return static function (Slim\App $app): void {
     $app->put('/history/{id}', [HistoryController::class, 'handleUpdateHistory']);
     $app->delete('/history', [HistoryController::class, 'handleDeleteHistory']);
 
+    $app->post('/soil', [SoilCalculatorController::class, 'handleSoilCalculator']);
 
     //* ROUTE: GET /ping
     $app->get('/ping', function (Request $request, Response $response, $args) {
