@@ -8,6 +8,8 @@ use App\Exceptions\HttpValidationException;
 use psr\Http\Message\ResponseInterface as Response;
 use psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Exception\HttpNotFoundException;
+use App\Helpers\WebserviceInvoker as Invoker;
+
 
 class LocationsController extends BaseController
 {
@@ -29,7 +31,10 @@ class LocationsController extends BaseController
 
         $this->setPaginationParams($filters, $this->locations_model, $request);
 
-        $locations = $this->locations_model->getLocations($request, $filters);
+        $invoker = new Invoker([], $request);
+        $locations["Observation Data"] = $invoker->invokeUri("https://api.gbif.org/v1/occurrence/search?country=US&hasCoordinate=true&basisOfRecord=HUMAN_OBSERVATION&limit=2")->results;
+
+        $locations += $this->locations_model->getLocations($request, $filters);
 
         return $this->renderJson($response, $locations);
     }

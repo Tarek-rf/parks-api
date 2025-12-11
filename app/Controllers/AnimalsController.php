@@ -10,6 +10,8 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use Monolog\Logger;
 use App\Helpers\LogHelper;
 use Firebase\JWT\JWT;
+use App\Helpers\WebserviceInvoker as Invoker;
+
 
 class AnimalsController extends BaseController
 {
@@ -34,7 +36,11 @@ class AnimalsController extends BaseController
 
         $this->setPaginationParams($filters, $this->animals_model, $request);
 
-        $animals = $this->animals_model->getAnimals($filters);
+        $invoker = new Invoker([], $request);
+        $animals["Species Data"] = $invoker->invokeUri("https://api.gbif.org/v1/species?limit=4")->results;
+
+
+        $animals += $this->animals_model->getAnimals($filters);
 
         return $this->renderJson($response, $animals);
     }

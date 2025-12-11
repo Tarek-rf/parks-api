@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Domain\Models\HistoryModel;
 use App\Domain\Services\HistoryService;
+use App\Helpers\WebserviceInvoker as Invoker;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
@@ -34,7 +35,13 @@ class HistoryController extends BaseController
 
         $this->setPaginationParams($filters, $this->history_model, $request);
 
-        $history = $this->history_model->getHistory($filters);
+        $invoker = new Invoker([],$request);
+        $history["BC Parks Data"] = $invoker->invokeUri("https://bcparks.api.gov.bc.ca/api/protected-areas?pagination%5blimit%5d=4")->data;
+
+        $history += $this->history_model->getHistory($filters);
+        // dd($history);
+
+
 
         return $this->renderJson($response, $history);
     }

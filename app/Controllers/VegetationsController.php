@@ -6,6 +6,8 @@ use App\Domain\Models\VegetationsModel;
 use App\Domain\Services\VegetationsService;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use App\Helpers\WebserviceInvoker as Invoker;
+
 
 class VegetationsController extends BaseController
 {
@@ -30,12 +32,15 @@ class VegetationsController extends BaseController
 
         $this->setPaginationParams($filters, $this->vegetations_model, $request);
 
-        $vegetations = $this->vegetations_model->getVegetations($filters);
+        $invoker = new Invoker([], $request);
+        $vegetations["Long/Lat City Data"] = $invoker->invokeUri("https://geocoding-api.open-meteo.com/v1/search?name=Berlin&count=10&language=en&format=json")->results;
+
+        $vegetations += $this->vegetations_model->getVegetations($filters);
 
         return $this->renderJson($response, $vegetations);
     }
 
-     /**
+    /**
      * Handles the creation of a new vegetation
      * @param $request the request send by the client to the server
      * @param $response the response sent by the server to the client
@@ -61,7 +66,7 @@ class VegetationsController extends BaseController
         return $this->renderJson($response, $payload, 400);
     }
 
-     /**
+    /**
      * Handles the update of an existing vegetation
      * @param $request the request send by the client to the server
      * @param $response the response sent by the server to the client
@@ -87,7 +92,7 @@ class VegetationsController extends BaseController
         return $this->renderJson($response, $payload, 400);
     }
 
-     /**
+    /**
      * Handles the deleteion of an existing vegetation
      * @param $request the request send by the client to the server
      * @param $response the response sent by the server to the client

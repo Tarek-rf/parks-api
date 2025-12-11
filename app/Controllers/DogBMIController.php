@@ -18,9 +18,7 @@ use App\Validation\Validator;
 
 class DogBMIController extends BaseController
 {
-    public function __construct() {
-
-    }
+    public function __construct() {}
 
     /**
      * handles the post of getting the distance by between the postal codes and returns a response with the distance
@@ -33,7 +31,6 @@ class DogBMIController extends BaseController
     {
 
         $body = $request->getParsedBody();
-
         $rules = [
             "height_unit" => [
                 "required",
@@ -72,6 +69,7 @@ class DogBMIController extends BaseController
             $height = $height * 39.3701;
         }
 
+
         $weight = $body["weight"];
         if (strtolower($body["weight_unit"]) === 'g') {
             $weight = $weight / 453.6;
@@ -84,5 +82,4 @@ class DogBMIController extends BaseController
         return $this->renderJson($response, $data);
 
     }
-
 }
