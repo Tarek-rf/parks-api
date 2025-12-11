@@ -209,7 +209,7 @@ class HistoryService extends BaseService
                 $id = $history_to_delete[0];
                 $result = Result::failure("The updated History has had an error!", [
                     "status" => "Failure",
-                    "message" => "The deleted History has had an error since ID: $id dose not exist "
+                    "message" => "The deleted History has had an error since ID: $id does not exist "
                 ]);
             } else {
                 //* returning a successful operation:
