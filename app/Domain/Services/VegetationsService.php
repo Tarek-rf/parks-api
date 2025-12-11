@@ -55,7 +55,7 @@ class VegetationsService extends BaseService
         ],
         "is_invasive" => [
             'required',
-            ['regex','/^[01]$/','message' => 'is_invasive should be 0 or 1'] ]
+            ['regex','/^[01]$/','message' => 'is_invasive should be 0 or 1 as a string'] ]
     );
          $validator = $this->validateInput($new_vegetation[0], $rules);
         if ($validator ===  true) {
