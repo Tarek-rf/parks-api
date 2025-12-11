@@ -178,7 +178,7 @@ class AnimalsService extends BaseService
                 $id = $condition[0];
                 $result = Result::failure("The deleted animal has had an error!", [
                     "status" => "Failure",
-                    "message" => "The deleted animal has had an error since ID: $id dose not exist "
+                    "message" => "The deleted animal has had an error since ID: $id does not exist "
                 ]);
             } else {
                 $result = Result::success(
