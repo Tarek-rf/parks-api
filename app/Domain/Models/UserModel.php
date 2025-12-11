@@ -12,12 +12,22 @@ class UserModel extends BaseModel
         parent::__construct($pdo);
     }
 
+    /**
+     * creates a new user in the database
+     * @param array $new_user the new user to create
+     * @return int last inserted id
+     */
     public function createUser(array $new_user): int
     {
 
         return $this->insert("ws_users", $new_user);
     }
 
+    /**
+     * gets a user based on the email
+     * @param string $email the email
+     * @return mixed mixed return value
+     */
     public function getUser(string $email): mixed
     {
         $pdo_values = ['email' => $email];

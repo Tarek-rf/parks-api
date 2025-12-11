@@ -23,6 +23,12 @@ class UserAuthController extends BaseController
         $this->user_model = $user_model;
     }
 
+    /**
+     * registers a user account to the database
+     * @param Request $request the request
+     * @param Response $response the response
+     * @return Response the response to return
+     */
     public function handleRegisterUser(Request $request, Response $response): Response
     {
         $data = $request->getParsedBody();
@@ -46,6 +52,13 @@ class UserAuthController extends BaseController
     }
 
     //* POST /token or /login
+    /**
+     * generates the JWT token
+     * @param Request $request the request
+     * @param Response $response the response
+     * @throws HttpBadRequestException if it is a bad request
+     * @return Response the response 
+     */
     public function handleGenerateJwt(Request $request, Response $response): Response
     {
         // 1) get the user info from the request code
