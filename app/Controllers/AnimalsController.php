@@ -92,7 +92,7 @@ class AnimalsController extends BaseController
 
         $payload = [
             "status" => "error",
-            "message" => "Failed to delete the location, refer to the details below",
+            "message" => "Failed to delete the animal, refer to the details below",
             "details" => $result->getErrors()
         ];
 
