@@ -12,6 +12,11 @@ class UserAuthService extends BaseService
     use PasswordTrait;
     public function __construct(private UserModel $user_model) {}
 
+    /**
+     * validates the registration of a user
+     * @param array $data the data to validate
+     * @return Result the result 
+     */
     function validateRegisterUser(array $data): Result
     {
         $rules = array(
