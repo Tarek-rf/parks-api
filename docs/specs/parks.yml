@@ -2,7 +2,7 @@ openapi: "3.1.2"
 info:
   title: National Parks API
   description: A REST API that provides info about national parks.
-  version: "1.0"
+  version: "3.0"
 servers:
   - url: http://localhost/parks-api
 paths:
@@ -471,6 +471,55 @@ paths:
           description: Successful operation
         '422':
           description: Unprocessable Entity
+  /register:
+    post:
+        description: Register a new user
+        requestBody:
+          description: Creates a new user account
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/RegisterUser'
+          required: true
+        responses:
+          '200':
+            description: Successful
+          '400':
+            description: Bad Request
+          '401':
+            description: Unauthorized
+  /login:
+    post:
+        description: Log in to an existing user
+        requestBody:
+          description: User login credentials
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/Login'
+          required: true
+        responses:
+          '200':
+            description: Successful
+          '400':
+            description: Bad Request
+          '401':
+            description: Unauthorized
+  /soil:
+    post:
+        description: Calculate the volume of soil needed
+        requestBody:
+          description: Calculates the volume of soil based on length, width, and depth.
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/SoilVolumeCalculator'
+          required: true
+        responses:
+          '200':
+            description: Successful
+          '400':
+            description: Bad Request
 components:
   schemas:
     History:
@@ -705,8 +754,8 @@ components:
           type: string
           example: 'peaty'
         is_invasive:
-          type: number
-          example: 0
+          type: string
+          example: '0'
     Animals:
         x-parks-router-model: io.parks-api.model.Animal
         type: object
@@ -773,3 +822,70 @@ components:
           phylum:
             type: string
             example: 'Chordata'
+    RegisterUser:
+      x-parks-router-model: io.parks-api.model.Register
+      type: object
+      properties:
+        first_name:
+          type: string
+          example: 'Charles'
+        last_name:
+          type: string
+          example: 'Piastri'
+        email:
+          type: string
+          example: 'charles@email.com'
+        password:
+          type: string
+          example: 'ln4ilya'
+        role:
+          type: string
+          enum:
+           - admin
+           - user
+          example: 'admin'
+    Login:
+      x-parks-router-model: io.parks-api.model.Register
+      type: object
+      properties:
+        email:
+          type: string
+          example: 'charles@email.com'
+        password:
+          type: string
+          example: 'ln4ilya'
+    SoilVolumeCalculator:
+      x-parks-router-model: io.parks-api.model.Soil
+      type: object
+      properties:
+        length:
+          type: number
+          example: '10'
+        length_unit:
+          type: string
+          enum:
+            - cm
+            - m
+            - ft
+          example: "m"
+        width:
+          type: number
+          example: '10'
+        width_unit:
+          type: string
+          enum:
+            - cm
+            - m
+            - ft
+          example: "m"
+        depth:
+          type: number
+          example: '10'
+        depth_unit:
+          type: string
+          enum:
+            - cm
+            - m
+            - ft
+          example: "m"
+
