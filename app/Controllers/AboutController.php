@@ -66,6 +66,27 @@ class AboutController extends BaseController
                         'PUT' => 'Update a History',
                         'DELETE' => 'Deletes a History'
                     )
+                ),
+                'register' => array(
+                    'uri' => $baseUri . '/register',
+                    'about' => 'This will allow you to create an account to be able to manipulate the resources',
+                    'methods' => array(
+                        'POST' => 'Creates an account',
+                    )
+                ),
+                'login' => array(
+                    'uri' => $baseUri . '/login',
+                    'about' => 'This will allow you to login to your account and use the token that will be generated to be able to manipulate the resources',
+                    'methods' => array(
+                        'POST' => 'Log to account and generate token',
+                    )
+                    ),
+                'soil' => array(
+                    'uri' => $baseUri . '/soil',
+                    'about' => 'This will allow you to calculate the volume of soil needed based on length, width and depth',
+                    'methods' => array(
+                        'POST' => 'Put values needed and unit and give you the volume needed in m3',
+                    )
                 )
             )
         );
