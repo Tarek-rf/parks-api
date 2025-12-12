@@ -67,7 +67,7 @@ class VegetationsService extends BaseService
                 "The vegetation was created successfully!",
                 [
                     "status" => "Success",
-                    "message" => "Successfully created a new history",
+                    "message" => "Successfully created a new vegetation",
                     "last_inserted_id" => $last_inserted_id
                 ]
             );
