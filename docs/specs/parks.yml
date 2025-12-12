@@ -520,6 +520,53 @@ paths:
             description: Successful
           '400':
             description: Bad Request
+  /catBMI:
+    post:
+      description: Calculate the BMI of a cat
+      requestBody:
+        description: Calculates the Feline BMI using rib cage circumference and leg length.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CatBMICalculator'
+        required: true
+      responses:
+        '200':
+          description: Successful
+        '400':
+          description: Bad Request
+
+  /dogBMI:
+    post:
+      description: Calculate the BMI of a dog
+      requestBody:
+        description: Calculates the Dog BMI using weight and height.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DogBMICalculator'
+        required: true
+      responses:
+        '200':
+          description: Successful
+        '400':
+          description: Bad Request
+
+  /coffee:
+    post:
+      description: Calculate the number of coffee portions allowed per day
+      requestBody:
+        description: Calculates how many portions of coffee someone can drink based on weight, sensitivity, and caffeine content.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CoffeeCalculator'
+        required: true
+      responses:
+        '200':
+          description: Successful
+        '400':
+          description: Bad Request
 components:
   schemas:
     History:
@@ -888,4 +935,103 @@ components:
             - m
             - ft
           example: "m"
-
+    CatBMICalculator:
+      x-parks-router-model: io.parks-api.model.Cat
+      type: object
+      properties:
+        leg:
+          type: number
+          example: 20
+          description: "Length of the lower back leg"
+        leg_unit:
+          type: string
+          enum:
+            - cm
+            - m
+            - ft
+            - in
+            - mm
+          example: "cm"
+          description: "Unit of measurement for leg length"
+        rib_cage:
+          type: number
+          example: 40
+          description: "Circumference around rib cage"
+        rib_cage_unit:
+          type: string
+          enum:
+            - cm
+            - m
+            - ft
+            - in
+            - mm
+          example: "cm"
+          description: "Unit of measurement for rib cage circumference"
+      required:
+        - leg
+        - leg_unit
+        - rib_cage
+        - rib_cage_unit
+    DogBMICalculator:
+      x-parks-router-model: io.parks-api.model.Dog
+      type: object
+      properties:
+        height:
+          type: number
+          example: 50
+          description: "Dog height before unit conversion"
+        height_unit:
+          type: string
+          enum:
+            - in
+            - cm
+            - m
+          example: "cm"
+          description: "Unit of dog height"
+        weight:
+          type: number
+          example: 20
+          description: "Dog weight before unit conversion"
+        weight_unit:
+          type: string
+          enum:
+            - kg
+            - lb
+            - g
+          example: "kg"
+          description: "Unit of dog weight"
+      required:
+        - height
+        - height_unit
+        - weight
+        - weight_unit
+    CoffeeCalculator:
+      x-parks-router-model: io.parks-api.model.Coffee
+      type: object
+      properties:
+        weightKg:
+          type: number
+          example: 70
+          description: "User weight in kilograms"
+        sensitivity:
+          type: string
+          enum:
+            - very_tolerant
+            - more_tolerant
+            - average
+            - more_sensitive
+            - very_sensitive
+          example: "average"
+          description: "Caffeine sensitivity level"
+        caffeinePer100g:
+          type: number
+          example: 60
+          description: "Caffeine content per 100g/ml of the drink"
+        portionSizeG:
+          type: number
+          example: 240
+          description: "Portion size in grams/ml (optional). Default is 240 if omitted."
+      required:
+        - weightKg
+        - sensitivity
+        - caffeinePer100g

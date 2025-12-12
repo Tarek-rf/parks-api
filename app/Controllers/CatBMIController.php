@@ -7,60 +7,105 @@ namespace App\Controllers;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Exception\HttpBadRequestException;
+use App\Validation\Validator;
 
 class CatBMIController extends BaseController
 {
     public function __construct() {}
 
     /**
-     * Handles the post of getting the BMI of cat. https://www.omnicalculator.com/biology/cat-bmi
-     * @param Request $request the request
-     * @param Response $response the response
-     * @throws HttpBadRequestException if they are missing a parameter
-     * @return Response the response with the data
+     * Handles the POST request for calculating Cat BMI.
+     * https://www.omnicalculator.com/biology/cat-bmi
+     *
+     * @param Request $request
+     * @param Response $response
+     * @throws HttpBadRequestException Bad request
+     * @return Response Response
      */
     public function handleCalculateCatBMI(Request $request, Response $response): Response
     {
-
         $body = $request->getParsedBody();
 
-        if (!isset($body["rib_cage_unit"]) || !isset($body["rib_cage"]) || !isset($body["rib_cage_unit"]) || !isset($body["rib_cage"]) || empty($body["leg_unit"]) || empty($body["leg"]) || empty($body["rib_cage_unit"]) || empty($body["rib_cage"])) {
-            throw new HttpBadRequestException($request, "One of the required body fields is missing");
+        $rules = [
+            "leg" => [
+                "required",
+                "numeric",
+                ["min", 0]
+            ],
+            "leg_unit" => [
+                "required",
+                [
+                    'in',
+                    ['in', 'cm', 'm', 'ft', 'mm'],
+                    'message' => "Unit must be one of: in, cm, m, ft, mm and lowercase"
+                ]
+            ],
+            "rib_cage" => [
+                "required",
+                "numeric",
+                ["min", 0]
+            ],
+            "rib_cage_unit" => [
+                "required",
+                [
+                    'in',
+                    ['in', 'cm', 'm', 'ft', 'mm'],
+                    'message' => "Unit must be one of: in, cm, m, ft, mm and lowercase"
+                ]
+            ]
+        ];
+
+        $validator = new Validator($body);
+        $validator->mapFieldsRules($rules);
+
+        if (!$validator->validate()) {
+            $errors = $validator->errorsToString();
+            throw new HttpBadRequestException($request, $errors);
         }
 
-        if (
-            in_array(strtolower($body["leg_unit"]), ["in", "cm", "m", "ft", "mm"]) &&
-            in_array(strtolower($body["rib_cage_unit"]), ["in", "cm", "m", "mm", "ft"])
-        ) {
+        $leg = $body["leg"];
+        $leg_unit = strtolower($body["leg_unit"]);
 
-            $leg = $body["leg"];
-            if ($body["leg_unit"] === 'in') {
-                $leg = $leg * 2.54;
-            } elseif ($body["leg_unit"] === 'm') {
-                $leg = $leg * 100;
-            } elseif ($body["leg_unit"] === 'ft') {
-                $leg = $leg * 30.48;
-            } elseif ($body["leg_unit"] === 'mm') {
-                $leg = $leg / 10;
-            }
+        $rib_cage = $body["rib_cage"];
+        $rib_cage_unit = strtolower($body["rib_cage_unit"]);
 
-            $rib_cage = $body["rib_cage"];
-            if ($body["rib_cage_unit"] === 'in') {
-                $rib_cage = $rib_cage * 2.54;
-            } elseif ($body["rib_cage_unit"] === 'm') {
-                $rib_cage = $rib_cage * 100;
-            } elseif ($body["rib_cage_unit"] === 'ft') {
-                $rib_cage = $rib_cage * 30.48;
-            } elseif ($body["rib_cage_unit"] === 'mm') {
-                $rib_cage = $rib_cage / 10;
-            }
-
-            $fbmi = (($rib_cage / 0.70622) - $leg / 0.9156) - $leg;
-            $fbmi = round($fbmi, 1);
-
-            $data = ["BMI for a cat that has a circumference " . $body["rib_cage"] . $body["rib_cage_unit"] . " around their rib cage and lower back leg that measures " . $body["leg"] . $body["leg_unit"] => $fbmi];
-            return $this->renderJson($response, $data);
+        switch ($leg_unit) {
+            case "in":
+                $leg *= 2.54;
+                break;
+            case "m":
+                $leg *= 100;
+                break;
+            case "ft":
+                $leg *= 30.48;
+                break;
+            case "mm":
+                $leg /= 10;
+                break;
         }
-        throw new HttpBadRequestException($request, "the unit of measurement is invalid: only in, cm, m, ft, mm are supported");
+
+        switch ($rib_cage_unit) {
+            case "in":
+                $rib_cage *= 2.54;
+                break;
+            case "m":
+                $rib_cage *= 100;
+                break;
+            case "ft":
+                $rib_cage *= 30.48;
+                break;
+            case "mm":
+                $rib_cage /= 10;
+                break;
+        }
+
+        $fbmi = (($rib_cage / 0.70622) - ($leg / 0.9156)) - $leg;
+        $fbmi = round($fbmi, 1);
+
+        $data = [
+            "Cat BMI" => $fbmi
+        ];
+
+        return $this->renderJson($response, $data);
     }
 }
