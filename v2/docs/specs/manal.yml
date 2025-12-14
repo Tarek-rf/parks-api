@@ -1,0 +1,190 @@
+openapi: '3.1.2'
+info:
+  title: National Parks API
+  description: A REST API that gives information about national parks
+  version: '1.0'
+servers:
+  - url: http://localhost/parks-api
+paths:
+ /vegetations:
+    get:
+      description: 'Get the list of vegetation '
+      parameters:
+        - name: type
+          in: query
+          description: type of vegetation
+          required: false
+          schema:
+            type: string
+            enum:
+              - tree
+              - flower
+              - shrub
+              - grass
+        - name: bloom
+          in: query
+          description: bloom season of vegetation
+          required: false
+          schema:
+            type: string
+            enum:
+              - winter
+              - spring
+              - summer
+              - fall
+        - name: growth
+          in: query
+          description: growth rate of vegetation
+          required: false
+          schema:
+            type: string
+            enum:
+              - fast
+              - moderate
+              - slow
+        - name: species_name
+          in: query
+          description: sorts alphabetically the vegetation by species name
+          required: false
+          schema:
+            type: string
+            enum:
+              - ASC
+              - DESC
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Vegetations'
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+    post:
+      description: Add a new vegetation
+      requestBody:
+        description: Creates a new vegetation
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                  $ref: '#/components/schemas/VegetationsPost'
+        required: true
+      responses:
+        '201':
+          description: Created
+        '400':
+          description: Bad Request
+    delete:
+      description: Delete a vegetation
+      requestBody:
+        description:  Deletes a vegetation
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                  type: integer
+              example: [12]
+        required: true
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+ /vegetations/{id}:
+    put:
+      description: Update a vegetation
+      requestBody:
+        description: Update a vegetation
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                  $ref: '#/components/schemas/VegetationsPost'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+        '400':
+          description: Bad Request
+components:
+  schemas:
+    Vegetations:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        species_name:
+          type: string
+          example: 'White Spruce'
+        type:
+          type: string
+          example: 'tree'
+        scientific_name:
+          type: string
+          example: 'Picea glauca'
+        climate_pref:
+          type: string
+          example: 'boreal'
+        conservation_status:
+          type: string
+          example: 'secure'
+        avg_canopy_diameter_m:
+          type: number
+          example: 6.00
+        growth_rate:
+          type: string
+          example: 'moderate'
+        bloom_season:
+          type: string
+          example: null
+        soil_preference:
+          type: string
+          example: 'loamy'
+        is_invasive:
+          type: number
+          example: 0
+    VegetationsPost:
+      x-parks-router-model: io.parks-api.model.Vegetation
+      type: object
+      properties:
+        species_name:
+          type: string
+          example: 'Common Reed'
+        type:
+          type: string
+          example: grass
+        scientific_name:
+          type: string
+          example: 'Phragmites australis'
+        climate_pref:
+          type: string
+          example: 'temperate'
+        conservation_status:
+          type: string
+          example: 'secure'
+        avg_canopy_diameter_m:
+          type: number
+          example: 5.50
+        growth_rate:
+          type: string
+          example: 'slow'
+        bloom_season:
+          type: string
+          example: null
+        soil_preference:
+          type: string
+          example: 'peaty'
+        is_invasive:
+          type: number
+          example: 0
+

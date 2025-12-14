@@ -1,0 +1,105 @@
+openapi: "3.1.2"
+info:
+  title: National Parks API
+  description: A REST API that provides info about national parks.
+  version: "1.0"
+servers:
+  - url: http://localhost/parks-api
+paths:
+  /history:
+    get:
+      description: "Get the list of histories of the national parks"
+      parameters:
+        - name: was_native_land
+          in: query
+          description: the histories of the parks that were originally native land
+          required: false
+          schema:
+            type: boolean
+            enum:
+              - true
+              - false
+        - name: founded_date_after
+          in: query
+          description: the histories of parks which are founded after this date
+          required: false
+          schema:
+            type: string
+            format: date
+        - name: founded_date_before
+          in: query
+          description: the histories of parks which are founded before this date
+          required: false
+          schema:
+            type: string
+            format: date
+        - name: age_of_park
+          in: query
+          description: sorts the order of histories of parks based on the age of the mark
+          required: false
+          schema:
+            type: integer
+            enum:
+              - DESC
+              - ASC
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/History'
+        "400":
+          description: Bad Request
+        "404":
+          description: Not Found
+components:
+  schemas:
+    History:
+      x-swagger-router-model: io.swagger.parks.model.History
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        location_id:
+          type: integer
+          format: int64
+          example: 1
+        founder:
+          type: string
+          example: Matthew
+        lastName:
+          type: string
+          example: James
+        founded_date:
+          type: string
+          example: '2005-01-12'
+        most_interesting_fact:
+          type: string
+          example: 'oldest oak trees exist here'
+        major_historic_accident:
+          type: string
+          example: '1980 landslide'
+        age_of_park:
+          type: integer
+          format: int64
+          example: 20
+        was_native_land:
+          type: integer
+          format: int64
+          example: 1
+        preservation_laws_enacted:
+          type: string
+          example: 'Forest Act 1950'
+        significant_restoration_year:
+          type: integer
+          format: int64
+          example: 2010
+
+
+
+

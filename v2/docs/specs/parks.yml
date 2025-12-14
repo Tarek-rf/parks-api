@@ -1,0 +1,1037 @@
+openapi: "3.1.2"
+info:
+  title: National Parks API
+  description: A REST API that provides info about national parks.
+  version: "3.0"
+servers:
+  - url: http://localhost/parks-api
+paths:
+  /history:
+    get:
+      description: "Get the list of histories of the national parks"
+      parameters:
+        - name: was_native_land
+          in: query
+          description: the histories of the parks that were originally native land
+          required: false
+          schema:
+            type: boolean
+            enum:
+              - true
+              - false
+        - name: founded_date_after
+          in: query
+          description: the histories of parks which are founded after this date
+          required: false
+          schema:
+            type: string
+            format: date
+        - name: founded_date_before
+          in: query
+          description: the histories of parks which are founded before this date
+          required: false
+          schema:
+            type: string
+            format: date
+        - name: sort_by
+          in: query
+          description: Field to sort results by
+          required: false
+          schema:
+            type: string
+            enum:
+              - age_of_park
+        - name: order
+          in: query
+          description: sorts the order of histories of parks based on the age of the mark
+          required: false
+          schema:
+            type: string
+            enum:
+              - desc
+              - asc
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/History'
+        "400":
+          description: Bad Request
+        "404":
+          description: Not Found
+    post:
+      description: Add a new history
+      requestBody:
+        description: Adds a new history
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                  $ref: '#/components/schemas/HistoryPost'
+        required: true
+      responses:
+        '201':
+          description: Created
+        '422':
+          description: Unprocessable Entity
+    delete:
+      description: delete a history
+      requestBody:
+        description: deletes a history
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                  type: integer
+              example: [1,]
+        required: true
+      responses:
+        '204':
+          description: No Content
+        '422':
+          description: Unprocessable Entity
+  /history/{id}:
+    put:
+      description: update a history
+      requestBody:
+        description: update a history
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                  $ref: '#/components/schemas/HistoryPost'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+        '422':
+          description: Unprocessable Entity
+  /locations:
+    get:
+      description: 'Get the list of national parks locations'
+      parameters:
+        - name: name
+          in: query
+          description: The name of the national park
+          required: false
+          schema:
+            type: string
+        - name: country
+          in: query
+          description: Name of the country the national park is in
+          required: false
+          schema:
+            type: string
+        - name: province
+          in: query
+          description: Name of the province the national park is in
+          required: false
+          schema:
+            type: string
+        - name: area.min
+          in: query
+          description: Minimum area by square kilometer of the national park
+          required: false
+          schema:
+            type: number
+        - name: area.max
+          in: query
+          description: Maximum area by square kilometer of the national park
+          required: false
+          schema:
+            type: number
+        - name: sort_by
+          in: query
+          description: Field to sort results by
+          required: false
+          schema:
+            type: string
+            enum:
+              - id
+              - name
+              - country
+              - area
+            default: id
+        - name: order
+          in: query
+          description: Sort direction
+          required: false
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+            default: asc
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Location'
+        '400':
+          description: Bad Request
+        '422':
+          description: Unprocessable Entity
+        '404':
+          description: Not Found
+    post:
+      description: Add a new location
+      requestBody:
+        description: Adds a new location
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                  $ref: '#/components/schemas/LocationPost'
+        required: true
+      responses:
+        '201':
+          description: Created
+        '400':
+          description: Bad Request
+    delete:
+      description: delete one or more locations
+      requestBody:
+        description: deletes one or more locations
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: integer
+                example: [1,2]
+        required: true
+      responses:
+        '202':
+          description: Accepted
+        '400':
+          description: Bad Request
+  /locations/{id}:
+    put:
+      description: update a location
+      requestBody:
+        description: updates a location
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                  $ref: '#/components/schemas/LocationPost'
+        required: true
+      responses:
+        '202':
+          description: Accepted
+        '400':
+          description: Bad Request
+  /vegetations:
+    get:
+      description: 'Get the list of vegetation '
+      parameters:
+        - name: type
+          in: query
+          description: type of vegetation
+          required: false
+          schema:
+            type: string
+            enum:
+              - tree
+              - flower
+              - shrub
+              - grass
+        - name: bloom
+          in: query
+          description: bloom season of vegetation
+          required: false
+          schema:
+            type: string
+            enum:
+              - winter
+              - spring
+              - summer
+              - fall
+        - name: growth
+          in: query
+          description: growth rate of vegetation
+          required: false
+          schema:
+            type: string
+            enum:
+              - fast
+              - moderate
+              - slow
+        - name: sort_by
+          in: query
+          description: Field to sort results by
+          required: false
+          schema:
+            type: string
+            enum:
+              - species_name
+            default: species_name
+        - name: order
+          in: query
+          description: Sort direction
+          required: false
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+            default: asc
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Vegetations'
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+    post:
+      description: Add a new vegetation
+      requestBody:
+        description: Creates a new vegetation
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                  $ref: '#/components/schemas/VegetationsPost'
+        required: true
+      responses:
+        '201':
+          description: Created
+        '400':
+          description: Bad Request
+    delete:
+      description: Delete a vegetation
+      requestBody:
+        description:  Deletes a vegetation
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                  type: integer
+              example: [12]
+        required: true
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+  /vegetations/{id}:
+    put:
+      description: Update a vegetation
+      requestBody:
+        description: Update a vegetation
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                  $ref: '#/components/schemas/VegetationsPost'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+        '400':
+          description: Bad Request
+  /animals:
+    get:
+      description: 'Get the list of animals'
+      parameters:
+        - name: conservation_status
+          in: query
+          description: finds animals with a given conservation status
+          required: false
+          schema:
+            type: string
+            enum:
+              - extinct
+              - threatened
+              - least concerned
+        - name: diet
+          in: query
+          description: finds animals with a given diet
+          required: false
+          schema:
+            type: string
+        - name: family_name
+          in: query
+          description: finds animals with a given family name
+          required: false
+          schema:
+            type: string
+        - name: common_name
+          in: query
+          description: sorts alphabetically the animal's name
+          required: false
+          schema:
+            type: string
+            enum:
+              - ASC
+              - DESC
+        - name: sort_by
+          in: query
+          description: Field to sort results by
+          required: false
+          schema:
+            type: string
+            enum:
+              - average_weight_kg
+              - common_name
+        - name: order
+          in: query
+          description: Sort direction
+          required: false
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+            default: asc
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Animals'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not Found
+    post:
+      description: Add a new animal
+      requestBody:
+        description: Creates a new animal
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/AnimalsPost'
+        required: true
+      responses:
+        '201':
+          description: Created
+        '422':
+          description: Unprocessable Entity
+    delete:
+      description: delete an animal
+      requestBody:
+        description: deletes an animal
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                  type: integer
+            example: [3]
+        required: true
+      responses:
+        '204':
+          description: No Content
+        '422':
+          description: Unprocessable Entity
+  /animals/{id}:
+    put:
+      description: update an animal
+      requestBody:
+        description: updates an animal
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/AnimalsPost'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+        '422':
+          description: Unprocessable Entity
+  /register:
+    post:
+        description: Register a new user
+        requestBody:
+          description: Creates a new user account
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/RegisterUser'
+          required: true
+        responses:
+          '200':
+            description: Successful
+          '400':
+            description: Bad Request
+          '401':
+            description: Unauthorized
+  /login:
+    post:
+        description: Log in to an existing user
+        requestBody:
+          description: User login credentials
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/Login'
+          required: true
+        responses:
+          '200':
+            description: Successful
+          '400':
+            description: Bad Request
+          '401':
+            description: Unauthorized
+  /soil:
+    post:
+        description: Calculate the volume of soil needed
+        requestBody:
+          description: Calculates the volume of soil based on length, width, and depth.
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/SoilVolumeCalculator'
+          required: true
+        responses:
+          '200':
+            description: Successful
+          '400':
+            description: Bad Request
+  /catBMI:
+    post:
+      description: Calculate the BMI of a cat
+      requestBody:
+        description: Calculates the Feline BMI using rib cage circumference and leg length.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CatBMICalculator'
+        required: true
+      responses:
+        '200':
+          description: Successful
+        '400':
+          description: Bad Request
+
+  /dogBMI:
+    post:
+      description: Calculate the BMI of a dog
+      requestBody:
+        description: Calculates the Dog BMI using weight and height.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DogBMICalculator'
+        required: true
+      responses:
+        '200':
+          description: Successful
+        '400':
+          description: Bad Request
+
+  /coffee:
+    post:
+      description: Calculate the number of coffee portions allowed per day
+      requestBody:
+        description: Calculates how many portions of coffee someone can drink based on weight, sensitivity, and caffeine content.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CoffeeCalculator'
+        required: true
+      responses:
+        '200':
+          description: Successful
+        '400':
+          description: Bad Request
+components:
+  schemas:
+    History:
+      x-parks-router-model: io.parks-api.model.History
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        location_id:
+          type: integer
+          format: int64
+          example: 1
+        founder:
+          type: string
+          example: Matthew
+        lastName:
+          type: string
+          example: James
+        founded_date:
+          type: string
+          example: '2005-01-12'
+        most_interesting_fact:
+          type: string
+          example: 'oldest oak trees exist here'
+        major_historic_accident:
+          type: string
+          example: '1980 landslide'
+        age_of_park:
+          type: integer
+          format: int64
+          example: 20
+        was_native_land:
+          type: integer
+          format: int64
+          example: 1
+        preservation_laws_enacted:
+          type: string
+          example: 'Forest Act 1950'
+        significant_restoration_year:
+          type: integer
+          format: int64
+          example: 2010
+    HistoryPost:
+      x-parks-router-model: io.parks-api.model.History
+      type: object
+      properties:
+        location_id:
+          type: integer
+          format: int64
+          example: 1
+        founder:
+          type: string
+          example: Matthew
+        lastName:
+          type: string
+          example: James
+        founded_date:
+          type: string
+          example: '2005-01-12'
+        most_interesting_fact:
+          type: string
+          example: 'oldest oak trees exist here'
+        major_historic_accident:
+          type: string
+          example: '1980 landslide'
+        age_of_park:
+          type: integer
+          format: int64
+          example: 20
+        was_native_land:
+          type: integer
+          format: int64
+          example: 1
+        preservation_laws_enacted:
+          type: string
+          example: 'Forest Act 1950'
+        significant_restoration_year:
+          type: integer
+          format: int64
+          example: 2010
+    Location:
+        x-parks-router-model: io.parks-api.model.Location
+        type: object
+        properties:
+          id:
+            type: integer
+            format: int64
+            example: 1
+          name:
+            type: string
+            example: 'Maple Ridge Park'
+          country:
+            type: string
+            example: 'Canada'
+          province:
+            type: string
+            example: 'British Columbia'
+          address:
+            type: string
+            example: '123 Forest Rd'
+          latitude:
+            type: number
+            format: float
+            example: '49.282700'
+          longitude:
+            type: number
+            format: float
+            example: '-123.120700'
+          area_km2:
+            type: number
+            format: float
+            example: 512.30
+          max_elevation_m:
+            type: integer
+            format: int64
+            example: 2401
+          continent:
+            type: string
+            example: 'North America'
+          website:
+            type: string
+            format: uri
+            example: 'https://mapleridge.example'
+    LocationPost:
+      x-parks-router-model: io.parks-api.model.Location
+      type: object
+      properties:
+        name:
+          type: string
+          example: 'Example New Park'
+        country:
+          type: string
+          example: 'Canada'
+        province:
+          type: string
+          example: 'Quebec'
+        address:
+          type: string
+          example: '123 Example Rd'
+        latitude:
+          type: number
+          format: float
+          example: '49.282700'
+        longitude:
+          type: number
+          format: float
+          example: '-123.120700'
+        area_km2:
+          type: number
+          format: float
+          example: 111.23
+        max_elevation_m:
+          type: integer
+          format: int64
+          example: 2222
+        continent:
+          type: string
+          example: 'North America'
+        website:
+          type: string
+          format: uri
+          example: 'https://newparkexample.example'
+    Vegetations:
+      x-parks-router-model: io.parks-api.model.Vegetation
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        species_name:
+          type: string
+          example: 'White Spruce'
+        type:
+          type: string
+          example: 'tree'
+        scientific_name:
+          type: string
+          example: 'Picea glauca'
+        climate_pref:
+          type: string
+          example: 'boreal'
+        conservation_status:
+          type: string
+          example: 'secure'
+        avg_canopy_diameter_m:
+          type: number
+          example: 6.00
+        growth_rate:
+          type: string
+          example: 'moderate'
+        bloom_season:
+          type: string
+          example: null
+        soil_preference:
+          type: string
+          example: 'loamy'
+        is_invasive:
+          type: number
+          example: 0
+    VegetationsPost:
+      x-parks-router-model: io.parks-api.model.Vegetation
+      type: object
+      properties:
+        species_name:
+          type: string
+          example: 'Common Reed'
+        type:
+          type: string
+          example: grass
+        scientific_name:
+          type: string
+          example: 'Phragmites australis'
+        climate_pref:
+          type: string
+          example: 'temperate'
+        conservation_status:
+          type: string
+          example: 'secure'
+        avg_canopy_diameter_m:
+          type: number
+          example: 5.50
+        growth_rate:
+          type: string
+          example: 'slow'
+        bloom_season:
+          type: string
+          example: null
+        soil_preference:
+          type: string
+          example: 'peaty'
+        is_invasive:
+          type: string
+          example: '0'
+    Animals:
+        x-parks-router-model: io.parks-api.model.Animal
+        type: object
+        properties:
+          id:
+            type: integer
+            format: int64
+            example: 1
+          common_name:
+            type: string
+            example: Cat
+          scientific_name:
+            type: string
+            example: 'Felis catus'
+          class_name:
+            type: string
+            example: Mammalia
+          family_name:
+            type: string
+            example: Felidae
+          conservation_status:
+            type: string
+            example: 'least_concern'
+          average_weight:
+            type: number
+            example: 4.54
+          average_height:
+            type: number
+            example: 46
+          diet:
+            type: string
+            example: 'carnivore'
+          phylum:
+            type: string
+            example: 'Chordata'
+    AnimalsPost:
+        x-parks-router-model: io.parks-api.model.Animal
+        type: object
+        properties:
+          common_name:
+            type: string
+            example: Cat
+          scientific_name:
+            type: string
+            example: 'Felis catus'
+          class_name:
+            type: string
+            example: Mammalia
+          family_name:
+            type: string
+            example: Felidae
+          conservation_status:
+            type: string
+            example: 'least_concern'
+          average_weight:
+            type: number
+            example: 4.54
+          average_height:
+            type: number
+            example: 46
+          diet:
+            type: string
+            example: 'carnivore'
+          phylum:
+            type: string
+            example: 'Chordata'
+    RegisterUser:
+      x-parks-router-model: io.parks-api.model.Register
+      type: object
+      properties:
+        first_name:
+          type: string
+          example: 'Charles'
+        last_name:
+          type: string
+          example: 'Piastri'
+        email:
+          type: string
+          example: 'charles@email.com'
+        password:
+          type: string
+          example: 'ln4ilya'
+        role:
+          type: string
+          enum:
+           - admin
+           - user
+          example: 'admin'
+    Login:
+      x-parks-router-model: io.parks-api.model.Register
+      type: object
+      properties:
+        email:
+          type: string
+          example: 'charles@email.com'
+        password:
+          type: string
+          example: 'ln4ilya'
+    SoilVolumeCalculator:
+      x-parks-router-model: io.parks-api.model.Soil
+      type: object
+      properties:
+        length:
+          type: number
+          example: '10'
+        length_unit:
+          type: string
+          enum:
+            - cm
+            - m
+            - ft
+          example: "m"
+        width:
+          type: number
+          example: '10'
+        width_unit:
+          type: string
+          enum:
+            - cm
+            - m
+            - ft
+          example: "m"
+        depth:
+          type: number
+          example: '10'
+        depth_unit:
+          type: string
+          enum:
+            - cm
+            - m
+            - ft
+          example: "m"
+    CatBMICalculator:
+      x-parks-router-model: io.parks-api.model.Cat
+      type: object
+      properties:
+        leg:
+          type: number
+          example: 20
+          description: "Length of the lower back leg"
+        leg_unit:
+          type: string
+          enum:
+            - cm
+            - m
+            - ft
+            - in
+            - mm
+          example: "cm"
+          description: "Unit of measurement for leg length"
+        rib_cage:
+          type: number
+          example: 40
+          description: "Circumference around rib cage"
+        rib_cage_unit:
+          type: string
+          enum:
+            - cm
+            - m
+            - ft
+            - in
+            - mm
+          example: "cm"
+          description: "Unit of measurement for rib cage circumference"
+      required:
+        - leg
+        - leg_unit
+        - rib_cage
+        - rib_cage_unit
+    DogBMICalculator:
+      x-parks-router-model: io.parks-api.model.Dog
+      type: object
+      properties:
+        height:
+          type: number
+          example: 50
+          description: "Dog height before unit conversion"
+        height_unit:
+          type: string
+          enum:
+            - in
+            - cm
+            - m
+          example: "cm"
+          description: "Unit of dog height"
+        weight:
+          type: number
+          example: 20
+          description: "Dog weight before unit conversion"
+        weight_unit:
+          type: string
+          enum:
+            - kg
+            - lb
+            - g
+          example: "kg"
+          description: "Unit of dog weight"
+      required:
+        - height
+        - height_unit
+        - weight
+        - weight_unit
+    CoffeeCalculator:
+      x-parks-router-model: io.parks-api.model.Coffee
+      type: object
+      properties:
+        weightKg:
+          type: number
+          example: 70
+          description: "User weight in kilograms"
+        sensitivity:
+          type: string
+          enum:
+            - very_tolerant
+            - more_tolerant
+            - average
+            - more_sensitive
+            - very_sensitive
+          example: "average"
+          description: "Caffeine sensitivity level"
+        caffeinePer100g:
+          type: number
+          example: 60
+          description: "Caffeine content per 100g/ml of the drink"
+        portionSizeG:
+          type: number
+          example: 240
+          description: "Portion size in grams/ml (optional). Default is 240 if omitted."
+      required:
+        - weightKg
+        - sensitivity
+        - caffeinePer100g
