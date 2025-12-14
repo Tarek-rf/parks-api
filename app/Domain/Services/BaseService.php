@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Domain\Services;
 
-// use App\Validation\Validator;
-use Frostybee\Valicomb\Validator;
+use App\Validation\Validator;
+// use Frostybee\Valicomb\Validator;
 
 /**
  * Base service class for all services.
@@ -25,7 +25,7 @@ abstract class BaseService
     protected function validateInput(array $data, array $rules)
     {
         $validator = new Validator($data);
-        $validator->mapManyFieldsToRules($rules);
+        $validator->mapFieldsRules($rules);
         if (!$validator->validate()) {
             return $validator->errors();
         }
