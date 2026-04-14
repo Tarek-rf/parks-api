@@ -3,7 +3,7 @@
 > A RESTful web service built as a 5th semester Computer Science team project at Vanier College.
 
 ![Language](https://img.shields.io/github/languages/top/Tarek-rf/parks-api?style=flat-square)
-![License](https://img.shields.io/github/license/Tarek-rf/parks-api?style=flat-square)
+![License](https://img.shields.io/badge/License-MIT-yellow?style=flat-square)
 
 ---
 
